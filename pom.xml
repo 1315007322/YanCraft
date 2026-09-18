@@ -197,6 +197,13 @@
                 <version>${ruoyi.version}</version>
             </dependency>
 
+            <!-- 博客模块-->
+            <dependency>
+                <groupId>com.ruoyi</groupId>
+                <artifactId>ruoyi-blog</artifactId>
+                <version>${ruoyi.version}</version>
+            </dependency>
+
             <!-- 核心模块-->
             <dependency>
                 <groupId>com.ruoyi</groupId>
@@ -228,6 +235,7 @@
         <module>ruoyi-quartz</module>
         <module>ruoyi-generator</module>
         <module>ruoyi-common</module>
+        <module>ruoyi-blog</module>
     </modules>
     <packaging>pom</packaging>
 
