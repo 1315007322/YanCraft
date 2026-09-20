@@ -6,16 +6,7 @@
     </section>
     <p v-if="pending" class="panel empty">加载中…</p>
     <p v-else-if="!articles.length" class="panel empty">该标签下还没有文章。</p>
-    <article v-for="item in articles" :key="item.articleId" class="panel article-card">
-      <NuxtLink :to="articlePath(item)">
-        <img v-if="item.cover" :src="mediaUrl(item.cover)" :alt="item.title" />
-        <div v-else class="cover-fallback">{{ (item.title || 'S').slice(0, 1) }}</div>
-      </NuxtLink>
-      <div>
-        <h2><NuxtLink :to="articlePath(item)">{{ item.title }}</NuxtLink></h2>
-        <p v-if="item.summary" class="summary">{{ item.summary }}</p>
-      </div>
-    </article>
+    <ArticleCard v-for="item in articles" :key="item.articleId" :article="item" />
   </div>
 </template>
 <script setup lang="ts">

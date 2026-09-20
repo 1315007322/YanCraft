@@ -7,6 +7,7 @@ export function defaultSiteSetting(): CmsSiteSetting {
     logoHighlight: "YAN",
     tagline: "Going to try and get something up eventually I hope",
     author: "SuperYan",
+    authorSignature: "",
     avatarUrl: "",
     avatarLetter: "SY",
     footerText: "SuperYan",

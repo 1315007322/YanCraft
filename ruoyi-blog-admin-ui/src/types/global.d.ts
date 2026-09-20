@@ -5,6 +5,16 @@ declare module '*.vue' {
   export default component
 }
 
+declare module '*.md' {
+  const content: string
+  export default content
+}
+
+declare module '*.md?raw' {
+  const content: string
+  export default content
+}
+
 /** Vite 环境变量类型 */
 interface ImportMetaEnv {
   readonly VITE_APP_TITLE: string

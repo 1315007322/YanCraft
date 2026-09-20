@@ -6,22 +6,14 @@
     </section>
     <p v-if="pending" class="panel empty">加载中…</p>
     <p v-else-if="!articles.length" class="panel empty">还没有已发布的文章。</p>
-    <article v-for="item in articles" :key="item.articleId" class="panel article-card">
-      <NuxtLink :to="articlePath(item)">
-        <img v-if="item.cover" :src="mediaUrl(item.cover)" :alt="item.title" />
-        <div v-else class="cover-fallback">{{ (item.title || 'S').slice(0, 1) }}</div>
-      </NuxtLink>
-      <div>
-        <h2><NuxtLink :to="articlePath(item)">{{ item.title }}</NuxtLink></h2>
-        <p v-if="item.summary" class="summary">{{ item.summary }}</p>
-        <div class="meta">
-          <span>{{ item.author || site.author }}</span>
-          <span>{{ formatDate(item.publishTime) }}</span>
-          <span v-if="item.categoryName">{{ item.categoryName }}</span>
-          <span>{{ item.readingTime || 0 }} min</span>
-        </div>
-      </div>
-    </article>
+    <ArticleCard v-for="item in articles" :key="item.articleId" :article="item">
+      <template #meta>
+        <span>{{ item.author || site.author }}</span>
+        <span>{{ formatDate(item.publishTime) }}</span>
+        <span v-if="item.categoryName">{{ item.categoryName }}</span>
+        <span>{{ item.readingTime || 0 }} min</span>
+      </template>
+    </ArticleCard>
     <div v-if="total > pageSize" class="panel pager">
       <NuxtLink :to="pageLink(page - 1)" :aria-disabled="page <= 1">上一页</NuxtLink>
       <span>{{ page }} / {{ pageCount }}</span>

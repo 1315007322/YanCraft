@@ -25,7 +25,7 @@ body {
   background: var(--bg);
   color: var(--ink);
   font-family: var(--sans);
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.7;
 }
 
@@ -53,7 +53,7 @@ a:focus-visible {
 .topbar {
   flex-shrink: 0;
   z-index: 20;
-  height: 52px;
+  height: 64px;
   background: #fff;
   border-bottom: 1px solid var(--line);
   display: flex;
@@ -61,17 +61,17 @@ a:focus-visible {
 }
 
 .topbar-inner {
-  width: min(1280px, calc(100% - 28px));
+  width: min(1480px, calc(100% - 40px));
   margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 20px;
 }
 
 .logo {
   font-weight: 700;
-  font-size: 18px;
+  font-size: 22px;
   letter-spacing: 0.02em;
   color: var(--brand);
 }
@@ -83,11 +83,11 @@ a:focus-visible {
 .search-box {
   display: flex;
   align-items: center;
-  width: min(360px, 42vw);
-  height: 34px;
-  padding: 0 12px;
+  width: min(420px, 42vw);
+  height: 40px;
+  padding: 0 14px;
   border: 1px solid var(--line);
-  border-radius: 18px;
+  border-radius: 20px;
   background: #fafbfc;
 }
 
@@ -109,13 +109,13 @@ a:focus-visible {
 }
 
 .shell {
-  width: min(1280px, calc(100% - 28px));
-  margin: 16px auto;
+  width: min(1480px, calc(100% - 40px));
+  margin: 9px auto;
   flex: 1;
   min-height: 0;
   display: grid;
-  grid-template-columns: 220px minmax(0, 1fr) 260px;
-  gap: 16px;
+  grid-template-columns: 280px minmax(0, 1fr) 300px;
+  gap: 7px;
   align-items: stretch;
 }
 
@@ -150,19 +150,26 @@ a:focus-visible {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 5px;
 }
 
 .profile {
-  padding: 22px 18px 16px;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 22px 20px 18px;
+  text-align: left;
   border-bottom: 1px solid var(--line);
 }
 
+.profile-meta {
+  min-width: 0;
+}
+
 .avatar {
-  width: 72px;
-  height: 72px;
-  margin: 0 auto 10px;
+  width: 68px;
+  height: 68px;
+  flex: none;
   border-radius: 50%;
   background: #1d1d1f;
   color: #fff;
@@ -181,25 +188,30 @@ a:focus-visible {
 
 .profile strong {
   display: block;
-  font-size: 15px;
+  font-size: 17px;
+  line-height: 1.35;
 }
 
 .profile span {
+  display: block;
+  margin-top: 4px;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 13px;
+  line-height: 1.45;
+  word-break: break-word;
 }
 
 .nav-list {
   list-style: none;
   margin: 8px 0;
-  padding: 8px;
+  padding: 10px;
 }
 
 .nav-list a {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 9px 12px;
+  gap: 10px;
+  padding: 11px 14px;
   border-radius: 8px;
   color: #4b5563;
 }
@@ -218,7 +230,7 @@ a:focus-visible {
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  padding: 9px 12px;
+  padding: 11px 14px;
   border: 0;
   border-radius: 8px;
   background: transparent;
@@ -257,17 +269,17 @@ a:focus-visible {
 }
 
 .nav-sub a {
-  padding: 7px 12px;
-  font-size: 13px;
+  padding: 8px 14px;
+  font-size: 15px;
 }
 
 .hero {
-  padding: 22px 24px 8px;
+  padding: 26px 28px 12px;
 }
 
 .hero h1 {
   margin: 0;
-  font-size: 28px;
+  font-size: 32px;
   font-weight: 700;
 }
 
@@ -280,22 +292,43 @@ a:focus-visible {
 .feed {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 5px;
 }
 
 .article-card {
+  position: relative;
   display: grid;
-  grid-template-columns: 108px minmax(0, 1fr);
-  gap: 16px;
-  padding: 16px 18px;
+  grid-template-columns: 140px minmax(0, 1fr);
+  gap: 20px;
+  padding: 20px 22px;
+}
+
+.article-card.is-pinned > div:last-child {
+  padding-right: 52px;
+}
+
+.pin-badge {
+  position: absolute;
+  top: 0;
+  right: 16px;
+  z-index: 1;
+  padding: 5px 9px 6px;
+  border-radius: 0 0 7px 7px;
+  background: var(--brand);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  box-shadow: 0 2px 8px rgba(226, 59, 59, 0.28);
 }
 
 .article-card img,
 .cover-fallback {
-  width: 108px;
-  height: 108px;
+  width: 140px;
+  height: 140px;
   object-fit: cover;
-  border-radius: 10px;
+  border-radius: 12px;
   background: #eef1f5;
 }
 
@@ -303,13 +336,13 @@ a:focus-visible {
   display: grid;
   place-items: center;
   color: var(--accent);
-  font-size: 28px;
+  font-size: 32px;
   font-weight: 700;
 }
 
 .article-card h2 {
   margin: 0 0 8px;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
   line-height: 1.4;
 }
@@ -326,10 +359,10 @@ a:focus-visible {
 .meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 10px;
+  gap: 14px;
+  margin-top: 12px;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .pager {
@@ -351,7 +384,7 @@ a:focus-visible {
 }
 
 .rail-block {
-  padding: 14px 16px 8px;
+  padding: 18px 18px 10px;
 }
 
 .rail-block + .rail-block {
@@ -359,8 +392,8 @@ a:focus-visible {
 }
 
 .rail-block h3 {
-  margin: 0 0 10px;
-  font-size: 14px;
+  margin: 0 0 12px;
+  font-size: 16px;
 }
 
 .hot-list,
@@ -373,9 +406,9 @@ a:focus-visible {
 .hot-list li {
   display: flex;
   gap: 8px;
-  padding: 8px 0;
+  padding: 10px 0;
   border-bottom: 1px dashed var(--line);
-  font-size: 13px;
+  font-size: 15px;
 }
 
 .hot-list li:last-child {
@@ -406,21 +439,99 @@ a:focus-visible {
 }
 
 .cloud a {
-  padding: 2px 8px;
+  padding: 4px 10px;
   border-radius: 4px;
   background: #f3f4f6;
   color: #4b5563;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .post-wrap,
 .about-body {
-  padding: 24px 28px 36px;
+  padding: 28px 32px 40px;
+}
+
+.resume-head {
+  margin-bottom: 8px;
+}
+
+.resume-kicker {
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  color: var(--brand);
+}
+
+.about-body > .resume-head h1,
+.about-body > h1 {
+  margin: 0;
+  font-size: 34px;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.resume-sign {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.resume-md {
+  margin-top: 8px;
+}
+
+.resume-md > p:first-child {
+  color: #4b5563;
+}
+
+.resume-md blockquote {
+  margin: 0 0 1.2em;
+  padding: 0;
+  border: 0;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.resume-md h2 {
+  margin: 1.7em 0 0.65em;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--brand);
+}
+
+.resume-md h3 {
+  margin: 1.15em 0 0.2em;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.resume-md ul {
+  margin: 0.35em 0 0.8em;
+  padding-left: 1.15em;
+}
+
+.resume-md li {
+  margin: 0.2em 0;
+}
+
+.resume-md p {
+  margin: 0.35em 0 0.7em;
+}
+
+.resume-md code:not(pre code) {
+  background: transparent;
+  padding: 0;
+  color: var(--muted);
+  font-size: 13px;
 }
 
 .post-wrap h1 {
   margin: 0 0 12px;
-  font-size: 28px;
+  font-size: 32px;
   line-height: 1.35;
 }
 
@@ -473,9 +584,9 @@ a:focus-visible {
   color: var(--accent);
 }
 
-@media (max-width: 1080px) {
+@media (max-width: 1200px) {
   .shell {
-    grid-template-columns: 200px minmax(0, 1fr);
+    grid-template-columns: 240px minmax(0, 1fr);
   }
   .rail {
     display: none;
@@ -511,6 +622,6 @@ a:focus-visible {
   .article-card img,
   .cover-fallback {
     width: 100%;
-    height: 160px;
+    height: 200px;
   }
 }

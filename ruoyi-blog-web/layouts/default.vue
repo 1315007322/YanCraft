@@ -13,23 +13,25 @@
       <aside class="panel sidenav">
         <div class="profile">
           <div class="avatar">
-            <img v-if="site.avatarUrl" :src="mediaUrl(site.avatarUrl)" :alt="site.siteName" />
-            <template v-else>{{ site.avatarLetter || (site.siteName || 'S').slice(0, 2) }}</template>
+            <img v-if="site.avatarUrl" :src="mediaUrl(site.avatarUrl)" :alt="site.author || site.siteName" />
+            <template v-else>{{ site.avatarLetter || (site.author || site.siteName || 'S').slice(0, 2) }}</template>
           </div>
-          <strong>{{ site.siteName }}</strong>
-          <span>{{ site.tagline }}</span>
+          <div class="profile-meta">
+            <strong>{{ site.author || site.siteName }}</strong>
+            <span v-if="site.authorSignature">{{ site.authorSignature }}</span>
+          </div>
         </div>
         <nav>
           <ul class="nav-list">
             <li>
               <NuxtLink to="/" exact-active-class="active" active-class="is-partial">
-                <House :size="18" :stroke-width="2" />
+                <House :size="20" :stroke-width="2" />
                 <span>首页</span>
               </NuxtLink>
             </li>
             <li v-if="isEnabled(site.aboutEnabled)">
               <NuxtLink to="/about" exact-active-class="active" active-class="is-partial">
-                <User :size="18" :stroke-width="2" />
+                <User :size="20" :stroke-width="2" />
                 <span>关于我</span>
               </NuxtLink>
             </li>
@@ -39,17 +41,17 @@
                 :target="isEnabled(item.openInNew) ? '_blank' : '_self'"
                 :rel="isEnabled(item.openInNew) ? 'noopener noreferrer' : undefined"
               >
-                <ExternalLink :size="18" :stroke-width="2" />
+                <ExternalLink :size="20" :stroke-width="2" />
                 <span>{{ item.name }}</span>
               </a>
             </li>
             <li v-if="isEnabled(site.categoryEnabled)">
               <button class="nav-parent" type="button" :class="{ active: isCategorySection }" @click="categoryOpen = !categoryOpen">
                 <span class="nav-parent-main">
-                  <Folder :size="18" :stroke-width="2" />
+                  <Folder :size="20" :stroke-width="2" />
                   <span>分类</span>
                 </span>
-                <ChevronDown :size="18" :stroke-width="2" class="caret" :class="{ open: categoryOpen }" />
+                <ChevronDown :size="20" :stroke-width="2" class="caret" :class="{ open: categoryOpen }" />
               </button>
               <ul v-show="categoryOpen" class="nav-sub">
                 <li v-for="c in categories" :key="c.categoryId">
@@ -65,10 +67,10 @@
             <li v-if="isEnabled(site.friendLinkEnabled)">
               <button class="nav-parent" type="button" @click="linkOpen = !linkOpen">
                 <span class="nav-parent-main">
-                  <LinkIcon :size="18" :stroke-width="2" />
+                  <LinkIcon :size="20" :stroke-width="2" />
                   <span>友链</span>
                 </span>
-                <ChevronDown :size="18" :stroke-width="2" class="caret" :class="{ open: linkOpen }" />
+                <ChevronDown :size="20" :stroke-width="2" class="caret" :class="{ open: linkOpen }" />
               </button>
               <ul v-show="linkOpen" class="nav-sub">
                 <li v-for="item in friendLinks" :key="item.linkId">

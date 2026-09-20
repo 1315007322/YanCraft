@@ -30,6 +30,7 @@ public class CmsSiteConfigServiceImpl implements ICmsSiteConfigService
     private static final String KEY_LOGO_HIGHLIGHT = "logoHighlight";
     private static final String KEY_TAGLINE = "tagline";
     private static final String KEY_AUTHOR = "author";
+    private static final String KEY_AUTHOR_SIGNATURE = "authorSignature";
     private static final String KEY_AVATAR_URL = "avatarUrl";
     private static final String KEY_AVATAR_LETTER = "avatarLetter";
     private static final String KEY_FOOTER = "footerText";
@@ -62,6 +63,7 @@ public class CmsSiteConfigServiceImpl implements ICmsSiteConfigService
         setting.setLogoHighlight(str(map, KEY_LOGO_HIGHLIGHT, "YAN"));
         setting.setTagline(str(map, KEY_TAGLINE, "Going to try and get something up eventually I hope"));
         setting.setAuthor(str(map, KEY_AUTHOR, "SuperYan"));
+        setting.setAuthorSignature(str(map, KEY_AUTHOR_SIGNATURE, ""));
         setting.setAvatarUrl(str(map, KEY_AVATAR_URL, ""));
         setting.setAvatarLetter(str(map, KEY_AVATAR_LETTER, "SY"));
         setting.setFooterText(str(map, KEY_FOOTER, "SuperYan"));
@@ -92,6 +94,7 @@ public class CmsSiteConfigServiceImpl implements ICmsSiteConfigService
         rows += upsert(KEY_LOGO_HIGHLIGHT, setting.getLogoHighlight());
         rows += upsert(KEY_TAGLINE, setting.getTagline());
         rows += upsert(KEY_AUTHOR, setting.getAuthor());
+        rows += upsert(KEY_AUTHOR_SIGNATURE, setting.getAuthorSignature());
         rows += upsert(KEY_AVATAR_URL, setting.getAvatarUrl());
         rows += upsert(KEY_AVATAR_LETTER, setting.getAvatarLetter());
         rows += upsert(KEY_FOOTER, setting.getFooterText());

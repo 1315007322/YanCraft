@@ -29,6 +29,9 @@ public class CmsSiteSetting
     @Size(max = 64)
     private String author;
 
+    @Size(max = 200)
+    private String authorSignature;
+
     @Size(max = 255)
     private String avatarUrl;
 
@@ -119,6 +122,16 @@ public class CmsSiteSetting
     public void setAuthor(String author)
     {
         this.author = author;
+    }
+
+    public String getAuthorSignature()
+    {
+        return authorSignature;
+    }
+
+    public void setAuthorSignature(String authorSignature)
+    {
+        this.authorSignature = authorSignature;
     }
 
     public String getAvatarUrl()

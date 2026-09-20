@@ -65,6 +65,7 @@ export interface CmsSiteSetting {
   logoHighlight?: string
   tagline?: string
   author?: string
+  authorSignature?: string
   avatarUrl?: string
   avatarLetter?: string
   footerText?: string
