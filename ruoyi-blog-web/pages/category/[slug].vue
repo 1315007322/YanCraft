@@ -38,5 +38,6 @@ const { data, pending } = await useAsyncData(
 )
 const articles = computed(() => data.value?.list.rows || [])
 const title = computed(() => (data.value?.cats.data || []).find(c => c.slug === slug.value)?.name || slug.value)
-useHead({ title: () => `${title.value} · SuperYan` })
+const site = await useSiteConfig()
+useHead({ title: () => `${title.value} · ${site.value.siteName || 'SuperYan'}` })
 </script>

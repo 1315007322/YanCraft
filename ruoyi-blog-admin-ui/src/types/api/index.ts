@@ -21,6 +21,7 @@ export * from "./cms/article";
 export * from "./cms/category";
 export * from "./cms/tag";
 export * from "./cms/link";
+export * from "./cms/site";
 
 // monitor 模块
 export * from "./monitor/cache";

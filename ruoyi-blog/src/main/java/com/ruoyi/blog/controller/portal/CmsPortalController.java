@@ -15,6 +15,7 @@ import com.ruoyi.blog.domain.CmsTag;
 import com.ruoyi.blog.service.ICmsArticleService;
 import com.ruoyi.blog.service.ICmsCategoryService;
 import com.ruoyi.blog.service.ICmsFriendLinkService;
+import com.ruoyi.blog.service.ICmsSiteConfigService;
 import com.ruoyi.blog.service.ICmsTagService;
 import com.ruoyi.common.annotation.Anonymous;
 import com.ruoyi.common.core.controller.BaseController;
@@ -42,6 +43,9 @@ public class CmsPortalController extends BaseController
 
     @Autowired
     private ICmsFriendLinkService friendLinkService;
+
+    @Autowired
+    private ICmsSiteConfigService siteConfigService;
 
     /**
      * 分页查询已发布文章列表（不含正文）。可按 keyword、categorySlug、tagSlug 过滤。
@@ -112,5 +116,14 @@ public class CmsPortalController extends BaseController
         CmsFriendLink query = new CmsFriendLink();
         query.setStatus(CmsConstants.STATUS_OK);
         return success(friendLinkService.selectFriendLinkList(query));
+    }
+
+    /**
+     * Public site setting for the portal shell.
+     */
+    @GetMapping("/site")
+    public AjaxResult site()
+    {
+        return success(siteConfigService.getSetting());
     }
 }

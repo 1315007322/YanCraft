@@ -170,6 +170,13 @@ a:focus-visible {
   place-items: center;
   font-size: 22px;
   font-weight: 700;
+  overflow: hidden;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .profile strong {
@@ -455,6 +462,15 @@ a:focus-visible {
   color: var(--muted);
   font-size: 12px;
   padding: 0 0 12px;
+  line-height: 1.8;
+}
+
+.site-footer .beian {
+  color: var(--muted);
+}
+
+.site-footer .beian:hover {
+  color: var(--accent);
 }
 
 @media (max-width: 1080px) {

@@ -1,10 +1,12 @@
 <template>
   <section class="panel about-body">
-    <h1>SuperYan</h1>
-    <p>Going to try and get something up eventually I hope</p>
-    <p>写作在若依后台完成，这里只读已发布的 Markdown 文章。</p>
+    <h1>{{ site.aboutTitle || site.siteName }}</h1>
+    <p v-if="site.tagline">{{ site.tagline }}</p>
+    <div class="markdown" v-html="html" />
   </section>
 </template>
 <script setup lang="ts">
-useHead({ title: 'SuperYan' })
+const site = await useSiteConfig()
+const html = computed(() => renderMarkdown(site.value.aboutContent))
+useHead({ title: () => site.value.aboutTitle || site.value.siteName || "SuperYan" })
 </script>

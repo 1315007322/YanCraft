@@ -1,8 +1,8 @@
 <template>
   <div class="feed">
     <section class="panel hero">
-      <h1>SuperYan</h1>
-      <p>Going to try and get something up eventually I hope</p>
+      <h1>{{ site.siteName }}</h1>
+      <p>{{ site.tagline }}</p>
     </section>
     <p v-if="pending" class="panel empty">加载中…</p>
     <p v-else-if="!articles.length" class="panel empty">还没有已发布的文章。</p>
@@ -15,7 +15,7 @@
         <h2><NuxtLink :to="articlePath(item)">{{ item.title }}</NuxtLink></h2>
         <p v-if="item.summary" class="summary">{{ item.summary }}</p>
         <div class="meta">
-          <span>{{ item.author || 'SuperYan' }}</span>
+          <span>{{ item.author || site.author }}</span>
           <span>{{ formatDate(item.publishTime) }}</span>
           <span v-if="item.categoryName">{{ item.categoryName }}</span>
           <span>{{ item.readingTime || 0 }} min</span>
@@ -32,20 +32,21 @@
 
 <script setup lang="ts">
 const route = useRoute()
+const site = await useSiteConfig()
 const page = computed(() => Math.max(1, Number(route.query.page || 1)))
 const keyword = computed(() => String(route.query.q || ''))
-const pageSize = 8
-const pageTitle = computed(() => keyword.value ? `搜索：${keyword.value}` : 'SuperYan')
+const pageSize = computed(() => site.value.homePageSize || 8)
+const pageTitle = computed(() => keyword.value ? `搜索：${keyword.value}` : (site.value.siteName || 'SuperYan'))
 
 const { data, pending } = await useAsyncData(
-  () => `home-${page.value}-${keyword.value}`,
-  () => fetchArticleList({ pageNum: page.value, pageSize, keyword: keyword.value || undefined }),
-  { watch: [page, keyword] }
+  () => `home-${page.value}-${keyword.value}-${pageSize.value}`,
+  () => fetchArticleList({ pageNum: page.value, pageSize: pageSize.value, keyword: keyword.value || undefined }),
+  { watch: [page, keyword, pageSize] }
 )
 
 const articles = computed(() => data.value?.rows || [])
 const total = computed(() => data.value?.total || 0)
-const pageCount = computed(() => Math.max(1, Math.ceil(total.value / pageSize)))
+const pageCount = computed(() => Math.max(1, Math.ceil(total.value / pageSize.value)))
 
 useHead({ title: () => `${pageTitle.value}` })
 

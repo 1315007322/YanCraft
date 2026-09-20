@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.blog.mapper.CmsSiteConfigMapper">
+
+    <resultMap type="CmsSiteConfig" id="CmsSiteConfigResult">
+        <id     property="configId"    column="config_id" />
+        <result property="configKey"   column="config_key" />
+        <result property="configValue" column="config_value" />
+    </resultMap>
+
+    <select id="selectSiteConfigList" resultMap="CmsSiteConfigResult">
+        select config_id, config_key, config_value from cms_site_config
+    </select>
+
+    <insert id="insertSiteConfig" parameterType="CmsSiteConfig" useGeneratedKeys="true" keyProperty="configId">
+        insert into cms_site_config (config_key, config_value, update_time)
+        values (#{configKey}, #{configValue}, sysdate())
+    </insert>
+
+    <update id="updateSiteConfigByKey" parameterType="CmsSiteConfig">
+        update cms_site_config
+        set config_value = #{configValue}, update_time = sysdate()
+        where config_key = #{configKey}
+    </update>
+</mapper>

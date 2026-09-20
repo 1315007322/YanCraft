@@ -2,8 +2,8 @@
   <div class="page">
     <header class="topbar">
       <div class="topbar-inner">
-        <NuxtLink to="/" class="logo">SUPER<b>YAN</b></NuxtLink>
-        <form class="search-box" @submit.prevent="onSearch">
+        <NuxtLink to="/" class="logo">{{ site.logoPrefix }}<b>{{ site.logoHighlight }}</b></NuxtLink>
+        <form v-if="isEnabled(site.searchEnabled)" class="search-box" @submit.prevent="onSearch">
           <input v-model="keywordInput" type="search" :placeholder="'搜索'" />
           <button type="submit">搜索</button>
         </form>
@@ -12,9 +12,12 @@
     <div class="shell">
       <aside class="panel sidenav">
         <div class="profile">
-          <div class="avatar">SY</div>
-          <strong>SuperYan</strong>
-          <span>Going to try and get something up eventually I hope</span>
+          <div class="avatar">
+            <img v-if="site.avatarUrl" :src="mediaUrl(site.avatarUrl)" :alt="site.siteName" />
+            <template v-else>{{ site.avatarLetter || (site.siteName || 'S').slice(0, 2) }}</template>
+          </div>
+          <strong>{{ site.siteName }}</strong>
+          <span>{{ site.tagline }}</span>
         </div>
         <nav>
           <ul class="nav-list">
@@ -24,13 +27,23 @@
                 <span>首页</span>
               </NuxtLink>
             </li>
-            <li>
+            <li v-if="isEnabled(site.aboutEnabled)">
               <NuxtLink to="/about" exact-active-class="active" active-class="is-partial">
                 <User :size="18" :stroke-width="2" />
                 <span>关于我</span>
               </NuxtLink>
             </li>
-            <li>
+            <li v-for="item in extraNavs" :key="item.name + (item.url || '')">
+              <a
+                :href="item.url"
+                :target="isEnabled(item.openInNew) ? '_blank' : '_self'"
+                :rel="isEnabled(item.openInNew) ? 'noopener noreferrer' : undefined"
+              >
+                <ExternalLink :size="18" :stroke-width="2" />
+                <span>{{ item.name }}</span>
+              </a>
+            </li>
+            <li v-if="isEnabled(site.categoryEnabled)">
               <button class="nav-parent" type="button" :class="{ active: isCategorySection }" @click="categoryOpen = !categoryOpen">
                 <span class="nav-parent-main">
                   <Folder :size="18" :stroke-width="2" />
@@ -49,7 +62,7 @@
                 </li>
               </ul>
             </li>
-            <li>
+            <li v-if="isEnabled(site.friendLinkEnabled)">
               <button class="nav-parent" type="button" @click="linkOpen = !linkOpen">
                 <span class="nav-parent-main">
                   <LinkIcon :size="18" :stroke-width="2" />
@@ -104,35 +117,51 @@
         </div>
       </aside>
     </div>
-    <footer class="site-footer">SuperYan</footer>
+    <footer class="site-footer">
+      <div>{{ site.footerText || site.siteName }}</div>
+      <a
+        v-if="site.beianText"
+        class="beian"
+        :href="site.beianUrl || 'https://beian.miit.gov.cn/'"
+        target="_blank"
+        rel="noopener noreferrer"
+      >{{ site.beianText }}</a>
+    </footer>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ChevronDown, Folder, House, Link as LinkIcon, User } from "lucide-vue-next"
+import { ChevronDown, ExternalLink, Folder, House, Link as LinkIcon, User } from "lucide-vue-next"
 
 const route = useRoute()
 const router = useRouter()
 const keywordInput = ref(String(route.query.q || ''))
+const site = await useSiteConfig()
 
 watch(() => route.query.q, (v) => { keywordInput.value = String(v || '') })
 
-const { data } = await useAsyncData('shell-meta', async () => {
-  const [list, cats, tagRes, hotRes, linkRes] = await Promise.all([
-    fetchArticleList({ pageNum: 1, pageSize: 1 }),
-    fetchCategories(),
-    fetchTags(),
-    fetchHotArticles(6),
-    fetchFriendLinks()
-  ])
-  return { list, cats, tagRes, hotRes, linkRes }
-})
+const { data } = await useAsyncData(
+  () => `shell-meta-${site.value.hotLimit || 6}`,
+  async () => {
+    const [list, cats, tagRes, hotRes, linkRes] = await Promise.all([
+      fetchArticleList({ pageNum: 1, pageSize: 1 }),
+      fetchCategories(),
+      fetchTags(),
+      fetchHotArticles(site.value.hotLimit || 6),
+      fetchFriendLinks()
+    ])
+    return { list, cats, tagRes, hotRes, linkRes }
+  }
+)
 
 const total = computed(() => data.value?.list.total || 0)
 const categories = computed(() => data.value?.cats.data || [])
 const tags = computed(() => data.value?.tagRes.data || [])
 const hot = computed(() => data.value?.hotRes.data || [])
 const friendLinks = computed(() => data.value?.linkRes.data || [])
+const extraNavs = computed(() =>
+  (site.value.extraNavLinks || []).filter((item) => isEnabled(item.enabled) && item.name && item.url)
+)
 const categoryOpen = ref(true)
 const linkOpen = ref(true)
 const isCategorySection = computed(() => route.path.startsWith("/category/"))
