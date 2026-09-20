@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ruoyi.blog.constant.CmsConstants;
 import com.ruoyi.blog.domain.CmsArticle;
 import com.ruoyi.blog.domain.CmsCategory;
+import com.ruoyi.blog.domain.CmsFriendLink;
 import com.ruoyi.blog.domain.CmsTag;
 import com.ruoyi.blog.service.ICmsArticleService;
 import com.ruoyi.blog.service.ICmsCategoryService;
+import com.ruoyi.blog.service.ICmsFriendLinkService;
 import com.ruoyi.blog.service.ICmsTagService;
 import com.ruoyi.common.annotation.Anonymous;
 import com.ruoyi.common.core.controller.BaseController;
@@ -37,6 +39,9 @@ public class CmsPortalController extends BaseController
 
     @Autowired
     private ICmsTagService tagService;
+
+    @Autowired
+    private ICmsFriendLinkService friendLinkService;
 
     /**
      * 分页查询已发布文章列表（不含正文）。可按 keyword、categorySlug、tagSlug 过滤。
@@ -96,5 +101,16 @@ public class CmsPortalController extends BaseController
     public AjaxResult tagList()
     {
         return success(tagService.selectTagList(new CmsTag()));
+    }
+
+    /**
+     * Enabled friend links, ordered by sort.
+     */
+    @GetMapping("/link/list")
+    public AjaxResult linkList()
+    {
+        CmsFriendLink query = new CmsFriendLink();
+        query.setStatus(CmsConstants.STATUS_OK);
+        return success(friendLinkService.selectFriendLinkList(query));
     }
 }

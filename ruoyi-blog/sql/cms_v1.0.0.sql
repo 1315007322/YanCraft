@@ -1,5 +1,7 @@
--- cms v1.0.0 博客模块
--- 在 craft 库执行；可重复执行会先 drop 业务表（仅首次建库使用）
+﻿-- cms v1.0.0 博客模块
+-- 在 craft 库执行；只重覆执行会 drop 业务表（仅首次建库使用）
+-- 本文件编码：UTF-8 with BOM
+-- 若菜单 2000-2033 已存在，请跳过文件末尾 sys_menu 插入
 
 -- ----------------------------
 -- 分类
@@ -24,7 +26,7 @@ create table cms_category (
   remark            varchar(500)    default null               comment '备注',
   primary key (category_id),
   unique key uk_cms_category_slug (slug)
-) engine=innodb comment = '博客分类表';
+) engine=innodb default charset=utf8mb4 collate=utf8mb4_unicode_ci comment = '博客分类表';
 
 create table cms_tag (
   tag_id            bigint(20)      not null auto_increment    comment '标签ID',
@@ -39,7 +41,7 @@ create table cms_tag (
   primary key (tag_id),
   unique key uk_cms_tag_name (name),
   unique key uk_cms_tag_slug (slug)
-) engine=innodb comment = '博客标签表';
+) engine=innodb default charset=utf8mb4 collate=utf8mb4_unicode_ci comment = '博客标签表';
 
 create table cms_article (
   article_id        bigint(20)      not null auto_increment    comment '文章ID',
@@ -54,7 +56,7 @@ create table cms_article (
   is_top            char(1)         default '0'                comment '是否置顶（0否 1是）',
   view_count        int(11)         default 0                  comment '浏览量',
   word_count        int(11)         default 0                  comment '字数（中文按字，英文按词）',
-  reading_time      int(11)         default 0                  comment '预计阅读分钟数',
+  reading_time      int(11)         default 0                  comment '预估阅读分钟数',
   publish_time      datetime                                   comment '首次发布时间',
   del_flag          char(1)         default '0'                comment '删除标志（0存在 2删除）',
   create_by         varchar(64)     default ''                 comment '创建者',
@@ -66,13 +68,13 @@ create table cms_article (
   unique key uk_cms_article_slug (slug),
   key idx_cms_article_category (category_id),
   key idx_cms_article_status_time (status, publish_time)
-) engine=innodb comment = '博客文章表';
+) engine=innodb default charset=utf8mb4 collate=utf8mb4_unicode_ci comment = '博客文章表';
 
 create table cms_article_tag (
   article_id        bigint(20)      not null                   comment '文章ID',
   tag_id            bigint(20)      not null                   comment '标签ID',
   primary key (article_id, tag_id)
-) engine=innodb comment = '文章标签关联表';
+) engine=innodb default charset=utf8mb4 collate=utf8mb4_unicode_ci comment = '文章标签关联表';
 
 -- ----------------------------
 -- 字典：文章状态
@@ -94,7 +96,8 @@ select 3, '下线', '2', 'cms_article_status', '', 'danger', 'N', '0', 'admin', 
 from dual where not exists (select 1 from sys_dict_data where dict_type = 'cms_article_status' and dict_value = '2');
 
 -- ----------------------------
--- 菜单（menu_id 从 2000 起，避开若依初始数据）
+-- 菜单（menu_id 从 2000 起，躲开若依初始数据）
+-- 若菜单已导入，下面这段请勿再执行
 -- ----------------------------
 insert into sys_menu values('2000', '博客管理', '0', '5', 'cms', null, '', '', 1, 0, 'M', '0', '0', '', 'documentation', 'admin', sysdate(), '', null, '博客管理目录');
 

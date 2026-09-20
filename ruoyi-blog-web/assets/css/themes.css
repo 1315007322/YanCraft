@@ -1,0 +1,99 @@
+html[data-theme="paper"] {
+  --paper: #f3ead9;
+  --paper-2: #e8dcc6;
+  --ink: #1a1612;
+  --ink-soft: #5c5348;
+  --seal: #c45c26;
+  --rule: rgba(26, 22, 18, 0.18);
+  --code-bg: #221c16;
+  --code-fg: #f3ead9;
+  --display: "Fraunces", "Noto Serif SC", serif;
+  --body: "Noto Serif SC", "Songti SC", serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+  --grain: radial-gradient(rgba(26, 22, 18, 0.035) 0.7px, transparent 0.7px);
+  --grain-size: 7px 7px;
+  --title-tracking: -0.03em;
+  --chip-radius: 0;
+}
+
+html[data-theme="press"] {
+  --paper: #f7f4ef;
+  --paper-2: #ece6db;
+  --ink: #111111;
+  --ink-soft: #4a4a4a;
+  --seal: #a31111;
+  --rule: #111111;
+  --code-bg: #111111;
+  --code-fg: #f7f4ef;
+  --display: "Big Shoulders Text", "Noto Serif SC", sans-serif;
+  --body: "Noto Serif SC", serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+  --grain: none;
+  --grain-size: auto;
+  --title-tracking: 0.06em;
+  --chip-radius: 0;
+}
+
+html[data-theme="press"] .wordmark {
+  text-transform: uppercase;
+  font-size: 1.55rem;
+}
+
+html[data-theme="press"] .site-header,
+html[data-theme="press"] .site-footer,
+html[data-theme="press"] .rail h3 {
+  border-width: 2px;
+}
+
+html[data-theme="celadon"] {
+  --paper: #d7e6dc;
+  --paper-2: #c3d6cb;
+  --ink: #14342c;
+  --ink-soft: #3f5c53;
+  --seal: #7a4e22;
+  --rule: rgba(20, 52, 44, 0.22);
+  --code-bg: #122821;
+  --code-fg: #e4eee8;
+  --display: "Cormorant Garamond", "Noto Serif SC", serif;
+  --body: "Noto Serif SC", serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+  --grain: radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.35), transparent 42%);
+  --grain-size: auto;
+  --title-tracking: 0.01em;
+  --chip-radius: 999px;
+}
+
+html[data-theme="celadon"] .site-main {
+  padding-top: 3.4rem;
+}
+
+html[data-theme="celadon"] .page-title,
+html[data-theme="celadon"] .post-hero h1 {
+  font-weight: 500;
+}
+
+html[data-theme="night"] {
+  --paper: #14110e;
+  --paper-2: #221c16;
+  --ink: #eadfce;
+  --ink-soft: #b3a48d;
+  --seal: #d4a017;
+  --rule: rgba(234, 223, 206, 0.16);
+  --code-bg: #0c0a08;
+  --code-fg: #eadfce;
+  --display: "Libre Baskerville", "Noto Serif SC", serif;
+  --body: "Noto Serif SC", serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+  --grain: radial-gradient(ellipse at top, rgba(212, 160, 23, 0.07), transparent 55%);
+  --grain-size: auto;
+  --title-tracking: -0.02em;
+  --chip-radius: 0;
+}
+
+html[data-theme="night"] .search-box button,
+html[data-theme="night"] .chip-list a.active,
+html[data-theme="night"] .theme-switch button[aria-pressed="true"] {
+  background: var(--seal);
+  border-color: var(--seal);
+  color: #14110e;
+}

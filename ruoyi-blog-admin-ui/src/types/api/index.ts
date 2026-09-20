@@ -17,6 +17,11 @@ export * from "./system/dict";
 export * from "./system/config";
 export * from "./system/notice";
 
+export * from "./cms/article";
+export * from "./cms/category";
+export * from "./cms/tag";
+export * from "./cms/link";
+
 // monitor 模块
 export * from "./monitor/cache";
 export * from "./monitor/job";

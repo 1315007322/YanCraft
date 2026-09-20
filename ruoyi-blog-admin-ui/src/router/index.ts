@@ -163,6 +163,20 @@ export const dynamicRoutes = [
         meta: { title: '修改生成配置', activeMenu: '/tool/gen' }
       }
     ]
+  },
+  {
+    path: '/cms/article-edit',
+    component: Layout,
+    hidden: true,
+    permissions: ['cms:article:add', 'cms:article:edit'],
+    children: [
+      {
+        path: 'index/:articleId(\\d+)?',
+        component: () => import('@/views/cms/article/form.vue'),
+        name: 'CmsArticleForm',
+        meta: { title: '文章编辑', activeMenu: '/cms/article', noCache: true }
+      }
+    ]
   }
 ]
 

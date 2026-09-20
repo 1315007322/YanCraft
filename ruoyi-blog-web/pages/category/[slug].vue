@@ -1,0 +1,42 @@
+<template>
+  <div class="feed">
+    <section class="panel hero">
+      <h1>{{ title }}</h1>
+      <p>分类归档</p>
+    </section>
+    <p v-if="pending" class="panel empty">加载中…</p>
+    <p v-else-if="!articles.length" class="panel empty">该分类下还没有文章。</p>
+    <article v-for="item in articles" :key="item.articleId" class="panel article-card">
+      <NuxtLink :to="articlePath(item)">
+        <img v-if="item.cover" :src="mediaUrl(item.cover)" :alt="item.title" />
+        <div v-else class="cover-fallback">{{ (item.title || 'S').slice(0, 1) }}</div>
+      </NuxtLink>
+      <div>
+        <h2><NuxtLink :to="articlePath(item)">{{ item.title }}</NuxtLink></h2>
+        <p v-if="item.summary" class="summary">{{ item.summary }}</p>
+        <div class="meta">
+          <span>{{ formatDate(item.publishTime) }}</span>
+          <span>{{ item.readingTime || 0 }} min</span>
+        </div>
+      </div>
+    </article>
+  </div>
+</template>
+<script setup lang="ts">
+const route = useRoute()
+const slug = computed(() => String(route.params.slug || ''))
+const { data, pending } = await useAsyncData(
+  () => `cat-${slug.value}`,
+  async () => {
+    const [list, cats] = await Promise.all([
+      fetchArticleList({ pageNum: 1, pageSize: 20, categorySlug: slug.value }),
+      fetchCategories()
+    ])
+    return { list, cats }
+  },
+  { watch: [slug] }
+)
+const articles = computed(() => data.value?.list.rows || [])
+const title = computed(() => (data.value?.cats.data || []).find(c => c.slug === slug.value)?.name || slug.value)
+useHead({ title: () => `${title.value} · SuperYan` })
+</script>
