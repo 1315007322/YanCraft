@@ -1,0 +1,16 @@
+ruoyi:
+  profile: /data/upload
+
+server:
+  address: 127.0.0.1
+  port: 8080
+
+spring:
+  devtools:
+    restart:
+      enabled: false
+
+logging:
+  level:
+    com.ruoyi: info
+    org.springframework: warn

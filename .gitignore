@@ -37,6 +37,10 @@ nbdist/
 .nb-gradle/
 
 ######################################################################
+# Deploy secrets (local one-click publish)
+docker/deploy.env
+
+######################################################################
 # Others
 *.log
 *.xml.versionsBackup

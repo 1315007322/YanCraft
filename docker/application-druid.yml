@@ -1,0 +1,40 @@
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    druid:
+      master:
+        url: ${MYSQL_URL:jdbc:mysql://mysql:3306/craft?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8}
+        username: ${MYSQL_USER:root}
+        password: ${MYSQL_PASSWORD:}
+      slave:
+        enabled: false
+        url:
+        username:
+        password:
+      initialSize: 5
+      minIdle: 10
+      maxActive: 20
+      maxWait: 60000
+      connectTimeout: 30000
+      socketTimeout: 60000
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      maxEvictableIdleTimeMillis: 900000
+      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      webStatFilter:
+        enabled: false
+      statViewServlet:
+        enabled: false
+      filter:
+        stat:
+          enabled: true
+          log-slow-sql: true
+          slow-sql-millis: 1000
+          merge-sql: true
+        wall:
+          config:
+            multi-statement-allow: true

@@ -1,0 +1,17 @@
+.git
+docker/deploy.env
+.idea
+*.iml
+**/node_modules
+**/.nuxt
+**/*.log
+ruoyi-admin/src/main/resources/application-druid.yml
+ruoyi-common/target
+ruoyi-system/target
+ruoyi-framework/target
+ruoyi-quartz/target
+ruoyi-generator/target
+ruoyi-blog/target
+ruoyi-blog-web/.env
+terminals
+**/.cursor
