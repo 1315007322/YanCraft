@@ -31,6 +31,7 @@ export interface CmsArticle {
   slug?: string
   summary?: string
   cover?: string
+  coverWide?: string
   content?: string
   categoryId?: number
   categoryName?: string

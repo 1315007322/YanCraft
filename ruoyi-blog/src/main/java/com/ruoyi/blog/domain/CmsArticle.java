@@ -29,8 +29,11 @@ public class CmsArticle extends BaseEntity
     /** 摘要 */
     private String summary;
 
-    /** 封面路径 */
+    /** 列表封面，1:1 */
     private String cover;
+
+    /** 详情头图，横向宽图 */
+    private String coverWide;
 
     /** Markdown 正文 */
     private String content;
@@ -134,6 +137,16 @@ public class CmsArticle extends BaseEntity
     public void setCover(String cover)
     {
         this.cover = cover;
+    }
+
+    public String getCoverWide()
+    {
+        return coverWide;
+    }
+
+    public void setCoverWide(String coverWide)
+    {
+        this.coverWide = coverWide;
     }
 
     public String getContent()

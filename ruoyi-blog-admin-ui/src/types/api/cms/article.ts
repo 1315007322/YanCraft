@@ -13,6 +13,7 @@ export interface CmsArticle extends BaseEntity {
   slug?: string;
   summary?: string;
   cover?: string;
+  coverWide?: string;
   content?: string;
   categoryId?: number;
   categoryName?: string;

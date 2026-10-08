@@ -117,6 +117,7 @@
             <li v-for="item in hot" :key="item.articleId">
               <i class="dot" />
               <NuxtLink :to="articlePath(item)">{{ item.title }}</NuxtLink>
+              <ViewCount class="hot-views" :value="item.viewCount" :size="12" />
             </li>
             <li v-if="!hot.length" class="hot-empty">暂无</li>
           </ul>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysAiConfigMapper">
+
+    <resultMap type="SysAiConfig" id="SysAiConfigResult">
+        <id     property="configId"        column="config_id" />
+        <result property="configName"      column="config_name" />
+        <result property="purpose"         column="purpose" />
+        <result property="baseUrl"         column="base_url" />
+        <result property="apiKey"          column="api_key" />
+        <result property="modelName"       column="model_name" />
+        <result property="timeoutSeconds"  column="timeout_seconds" />
+        <result property="maxTokens"       column="max_tokens" />
+        <result property="imageSize"       column="image_size" />
+        <result property="systemPrompt"    column="system_prompt" />
+        <result property="isDefault"       column="is_default" />
+        <result property="status"          column="status" />
+        <result property="sort"            column="sort" />
+        <result property="createBy"        column="create_by" />
+        <result property="createTime"      column="create_time" />
+        <result property="updateBy"        column="update_by" />
+        <result property="updateTime"      column="update_time" />
+        <result property="remark"          column="remark" />
+    </resultMap>
+
+    <sql id="selectVo">
+        select config_id, config_name, purpose, base_url, api_key, model_name, timeout_seconds,
+               max_tokens, image_size, system_prompt, is_default, status, sort,
+               create_by, create_time, update_by, update_time, remark
+        from sys_ai_config
+    </sql>
+
+    <select id="selectAiConfigList" parameterType="SysAiConfig" resultMap="SysAiConfigResult">
+        <include refid="selectVo"/>
+        <where>
+            <if test="configName != null and configName != ''">
+                AND config_name like concat('%', #{configName}, '%')
+            </if>
+            <if test="purpose != null and purpose != ''">
+                AND purpose = #{purpose}
+            </if>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+        </where>
+        order by sort asc, config_id desc
+    </select>
+
+    <select id="selectAiConfigById" parameterType="Long" resultMap="SysAiConfigResult">
+        <include refid="selectVo"/>
+        where config_id = #{configId}
+    </select>
+
+    <select id="checkConfigNameUnique" parameterType="String" resultMap="SysAiConfigResult">
+        <include refid="selectVo"/>
+        where config_name = #{configName} limit 1
+    </select>
+
+    <select id="selectEnabledOptions" resultMap="SysAiConfigResult">
+        select config_id, config_name, purpose, base_url, model_name, timeout_seconds,
+               max_tokens, image_size, system_prompt, is_default, status, sort
+        from sys_ai_config
+        where status = '0'
+        <if test="purpose != null and purpose != ''">
+            AND purpose = #{purpose}
+        </if>
+        order by is_default desc, sort asc, config_id desc
+    </select>
+
+    <insert id="insertAiConfig" parameterType="SysAiConfig" useGeneratedKeys="true" keyProperty="configId">
+        insert into sys_ai_config (
+            config_name, purpose, base_url, api_key, model_name, timeout_seconds, max_tokens,
+            image_size, system_prompt, is_default, status, sort, create_by, create_time, remark
+        ) values (
+            #{configName}, #{purpose}, #{baseUrl}, #{apiKey}, #{modelName}, #{timeoutSeconds}, #{maxTokens},
+            #{imageSize}, #{systemPrompt}, #{isDefault}, #{status}, #{sort}, #{createBy}, sysdate(), #{remark}
+        )
+    </insert>
+
+    <update id="updateAiConfig" parameterType="SysAiConfig">
+        update sys_ai_config
+        <set>
+            <if test="configName != null and configName != ''">config_name = #{configName},</if>
+            <if test="purpose != null and purpose != ''">purpose = #{purpose},</if>
+            <if test="baseUrl != null and baseUrl != ''">base_url = #{baseUrl},</if>
+            <if test="apiKey != null and apiKey != ''">api_key = #{apiKey},</if>
+            <if test="modelName != null and modelName != ''">model_name = #{modelName},</if>
+            <if test="timeoutSeconds != null">timeout_seconds = #{timeoutSeconds},</if>
+            <if test="maxTokens != null">max_tokens = #{maxTokens},</if>
+            <if test="imageSize != null">image_size = #{imageSize},</if>
+            <if test="systemPrompt != null">system_prompt = #{systemPrompt},</if>
+            <if test="isDefault != null and isDefault != ''">is_default = #{isDefault},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            update_time = sysdate()
+        </set>
+        where config_id = #{configId}
+    </update>
+
+    <update id="clearDefaultByPurpose">
+        update sys_ai_config
+        set is_default = 'N', update_time = sysdate()
+        where purpose = #{purpose}
+          and is_default = 'Y'
+        <if test="excludeId != null">
+            and config_id &lt;&gt; #{excludeId}
+        </if>
+    </update>
+
+    <delete id="deleteAiConfigById" parameterType="Long">
+        delete from sys_ai_config where config_id = #{configId}
+    </delete>
+
+    <delete id="deleteAiConfigByIds">
+        delete from sys_ai_config where config_id in
+        <foreach collection="array" item="configId" open="(" separator="," close=")">
+            #{configId}
+        </foreach>
+    </delete>
+</mapper>

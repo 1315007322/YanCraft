@@ -16,6 +16,7 @@ export * from "./system/post";
 export * from "./system/dict";
 export * from "./system/config";
 export * from "./system/notice";
+export * from "./system/ai";
 
 export * from "./cms/article";
 export * from "./cms/category";

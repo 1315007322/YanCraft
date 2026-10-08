@@ -10,6 +10,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="slug"         column="slug" />
         <result property="summary"      column="summary" />
         <result property="cover"        column="cover" />
+        <result property="coverWide"    column="cover_wide" />
         <result property="content"      column="content" />
         <result property="categoryId"   column="category_id" />
         <result property="categoryName" column="category_name" />
@@ -29,7 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectListVo">
-        select a.article_id, a.title, a.slug, a.summary, a.cover, a.category_id, c.name as category_name,
+        select a.article_id, a.title, a.slug, a.summary, a.cover, a.cover_wide, a.category_id, c.name as category_name,
                a.author, a.status, a.is_top, a.view_count, a.word_count, a.reading_time, a.publish_time,
                a.del_flag, a.create_by, a.create_time, a.update_by, a.update_time, a.remark
         from cms_article a
@@ -37,7 +38,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <sql id="selectDetailVo">
-        select a.article_id, a.title, a.slug, a.summary, a.cover, a.content, a.category_id, c.name as category_name,
+        select a.article_id, a.title, a.slug, a.summary, a.cover, a.cover_wide, a.content, a.category_id, c.name as category_name,
                a.author, a.status, a.is_top, a.view_count, a.word_count, a.reading_time, a.publish_time,
                a.del_flag, a.create_by, a.create_time, a.update_by, a.update_time, a.remark
         from cms_article a
@@ -95,10 +96,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <insert id="insertArticle" parameterType="CmsArticle" useGeneratedKeys="true" keyProperty="articleId">
         insert into cms_article (
-            title, slug, summary, cover, content, category_id, author, status, is_top,
+            title, slug, summary, cover, cover_wide, content, category_id, author, status, is_top,
             view_count, word_count, reading_time, publish_time, del_flag, create_by, create_time, remark
         ) values (
-            #{title}, #{slug}, #{summary}, #{cover}, #{content}, #{categoryId}, #{author}, #{status}, #{isTop},
+            #{title}, #{slug}, #{summary}, #{cover}, #{coverWide}, #{content}, #{categoryId}, #{author}, #{status}, #{isTop},
             0, #{wordCount}, #{readingTime}, #{publishTime}, '0', #{createBy}, sysdate(), #{remark}
         )
     </insert>
@@ -110,6 +111,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             slug = #{slug},
             <if test="summary != null">summary = #{summary},</if>
             <if test="cover != null">cover = #{cover},</if>
+            <if test="coverWide != null">cover_wide = #{coverWide},</if>
             <if test="content != null">content = #{content},</if>
             category_id = #{categoryId},
             <if test="author != null">author = #{author},</if>

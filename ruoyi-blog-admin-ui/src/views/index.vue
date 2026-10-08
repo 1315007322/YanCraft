@@ -114,6 +114,36 @@
             </div>
           </template>
           <el-collapse accordion>
+            <el-collapse-item title="YanCraft 博客 1.8.2 - 2026-10-08">
+              <ol>
+                <li>文章编辑可用对话 AI 从正文提取列表摘要</li>
+              </ol>
+            </el-collapse-item>
+            <el-collapse-item title="YanCraft 博客 1.8.1 - 2026-10-08">
+              <ol>
+                <li>前台文章详情头图支持全屏预览，点击关闭</li>
+              </ol>
+            </el-collapse-item>
+            <el-collapse-item title="YanCraft 博客 1.8.0 - 2026-10-08">
+              <ol>
+                <li>文章封面拆成列表 1:1 与详情宽图两张，可分别上传或 AI 生成</li>
+              </ol>
+            </el-collapse-item>
+            <el-collapse-item title="YanCraft 博客 1.7.2 - 2026-10-08">
+              <ol>
+                <li>文章新增/编辑可用 AI 按摘要和正文生成卡通像素风格封面</li>
+              </ol>
+            </el-collapse-item>
+            <el-collapse-item title="AI 配置 1.0.0 - 2026-10-08">
+              <ol>
+                <li>系统管理可维护多套 AI 调用配置，供后续文章封面等业务自选</li>
+              </ol>
+            </el-collapse-item>
+            <el-collapse-item title="YanCraft 博客 1.7.1 - 2026-10-08">
+              <ol>
+                <li>前台文章列表卡片和详情页显示浏览次数</li>
+              </ol>
+            </el-collapse-item>
             <el-collapse-item title="YanCraft 博客 1.7.0 - 2026-10-08">
               <ol>
                 <li>前台预留多套主题方案，站点配置里可带缩略图选择</li>
