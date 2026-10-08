@@ -27,9 +27,9 @@ body {
   height: 100%;
   background-color: var(--bg);
   background-image:
-    radial-gradient(rgba(28, 25, 21, 0.035) 0.7px, transparent 0.7px),
-    linear-gradient(180deg, #f6f1ea 0%, var(--bg) 28%, #ece4d8 100%);
-  background-size: 5px 5px, auto;
+    var(--grain, radial-gradient(rgba(28, 25, 21, 0.035) 0.7px, transparent 0.7px)),
+    linear-gradient(180deg, var(--bg-top, #f6f1ea) 0%, var(--bg) 28%, var(--bg-bottom, #ece4d8) 100%);
+  background-size: var(--grain-size, 5px 5px), auto;
   color: var(--ink);
   font-family: var(--sans);
   font-size: 16px;
@@ -37,7 +37,7 @@ body {
 }
 
 ::selection {
-  background: rgba(201, 75, 58, 0.18);
+  background: color-mix(in srgb, var(--brand) 18%, transparent);
   color: var(--ink);
 }
 

@@ -47,6 +47,9 @@ public class CmsSiteConfigServiceImpl implements ICmsSiteConfigService
     private static final String KEY_HOT_LIMIT = "hotLimit";
     private static final String KEY_HOME_PAGE_SIZE = "homePageSize";
     private static final String KEY_EXTRA_NAV_LINKS = "extraNavLinks";
+    private static final String KEY_THEME_ID = "themeId";
+    private static final String DEFAULT_THEME_ID = "paper";
+    private static final String[] THEME_IDS = new String[] { "paper", "press", "celadon", "night", "ink", "harbor" };
 
     @Autowired
     private CmsSiteConfigMapper siteConfigMapper;
@@ -81,6 +84,7 @@ public class CmsSiteConfigServiceImpl implements ICmsSiteConfigService
         setting.setHotLimit(num(map, KEY_HOT_LIMIT, 6));
         setting.setHomePageSize(num(map, KEY_HOME_PAGE_SIZE, 8));
         setting.setExtraNavLinks(parseNavLinks(map.get(KEY_EXTRA_NAV_LINKS)));
+        setting.setThemeId(normalizeThemeId(map.get(KEY_THEME_ID)));
         return setting;
     }
 
@@ -113,6 +117,7 @@ public class CmsSiteConfigServiceImpl implements ICmsSiteConfigService
         rows += upsert(KEY_HOT_LIMIT, setting.getHotLimit() == null ? "6" : String.valueOf(setting.getHotLimit()));
         rows += upsert(KEY_HOME_PAGE_SIZE, setting.getHomePageSize() == null ? "8" : String.valueOf(setting.getHomePageSize()));
         rows += upsert(KEY_EXTRA_NAV_LINKS, JSON.toJSONString(normalizeNavLinks(setting.getExtraNavLinks())));
+        rows += upsert(KEY_THEME_ID, normalizeThemeId(setting.getThemeId()));
         return rows;
     }
 
@@ -144,6 +149,23 @@ public class CmsSiteConfigServiceImpl implements ICmsSiteConfigService
             }
         }
         return map;
+    }
+
+    private String normalizeThemeId(String value)
+    {
+        if (StringUtils.isEmpty(value))
+        {
+            return DEFAULT_THEME_ID;
+        }
+        String id = value.trim();
+        for (int i = 0; i < THEME_IDS.length; i++)
+        {
+            if (THEME_IDS[i].equals(id))
+            {
+                return id;
+            }
+        }
+        return DEFAULT_THEME_ID;
     }
 
     private String str(Map<String, String> map, String key, String fallback)

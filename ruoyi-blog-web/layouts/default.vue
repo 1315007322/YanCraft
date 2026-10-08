@@ -154,11 +154,18 @@
 
 <script setup lang="ts">
 import { ChevronDown, ExternalLink, FlaskConical, Folder, House, Link as LinkIcon, Menu, User, X } from "lucide-vue-next"
+import { normalizeThemeId } from "~/utils/themes"
 
 const route = useRoute()
 const router = useRouter()
 const keywordInput = ref(String(route.query.q || ''))
 const site = await useSiteConfig()
+const themeId = computed(() => normalizeThemeId(site.value.themeId))
+useHead({
+  htmlAttrs: {
+    "data-theme": themeId
+  }
+})
 
 watch(() => route.query.q, (v) => { keywordInput.value = String(v || '') })
 

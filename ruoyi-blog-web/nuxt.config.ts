@@ -3,10 +3,10 @@ const backend = process.env.NUXT_BACKEND_URL || "http://127.0.0.1:8080"
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: false },
-  css: ["~/assets/css/main.css"],
+  css: ["~/assets/css/themes.css", "~/assets/css/main.css"],
   app: {
     head: {
-      htmlAttrs: { lang: "zh-CN" },
+      htmlAttrs: { lang: "zh-CN", "data-theme": "paper" },
       link: [
         { rel: "preconnect", href: "https://fonts.googleapis.com" },
         { rel: "preconnect", href: "https://fonts.gstatic.com", crossorigin: "" },

@@ -21,6 +21,7 @@ export interface CmsSiteSetting {
   hotLimit?: number
   homePageSize?: number
   extraNavLinks?: CmsNavLink[]
+  themeId?: string
 }
 
 export interface CmsNavLink {

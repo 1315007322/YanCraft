@@ -16,6 +16,8 @@ public interface IStockReviewService
 {
     List<StockReview> selectReviewList(StockReview query);
 
+    List<StockReviewTrade> selectTradeList(StockReviewTrade query);
+
     StockReview selectReviewById(Long reviewId, Long ownerUserId);
 
     StockReview selectReviewByDate(Date reviewDate, Long ownerUserId);

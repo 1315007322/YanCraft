@@ -177,6 +177,20 @@ export const dynamicRoutes = [
         meta: { title: '文章编辑', activeMenu: '/cms/article', noCache: true }
       }
     ]
+  },
+  {
+    path: '/stock/review-write',
+    component: Layout,
+    hidden: true,
+    permissions: ['stock:review:add', 'stock:review:edit'],
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/stock/review/write.vue'),
+        name: 'StockReviewWrite',
+        meta: { title: '写复盘', activeMenu: '/stock/review', noCache: true }
+      }
+    ]
   }
 ]
 

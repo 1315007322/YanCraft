@@ -41,6 +41,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy" column="update_by" />
         <result property="updateTime" column="update_time" />
         <result property="remark" column="remark" />
+        <result property="reviewDate" column="review_date" />
     </resultMap>
 
     <sql id="selectReviewVo">
@@ -199,6 +200,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{reviewId}
         </foreach>
     </update>
+
+    <select id="selectTradeList" parameterType="StockReviewTrade" resultMap="StockReviewTradeResult">
+        select t.trade_id, t.review_id, t.owner_user_id, t.stock_code, t.stock_name, t.direction,
+               t.quantity, t.price, t.profit_loss, t.result_tag, t.note, t.sort, t.del_flag,
+               t.create_by, t.create_time, t.update_by, t.update_time, t.remark,
+               r.review_date
+        from stock_review_trade t
+        inner join stock_review r
+           on r.review_id = t.review_id
+          and r.owner_user_id = t.owner_user_id
+          and r.del_flag = '0'
+        <where>
+            t.del_flag = '0'
+            and t.owner_user_id = #{ownerUserId}
+            <if test="keyword != null and keyword != ''">
+                and (
+                    t.stock_code like concat('%', #{keyword}, '%')
+                    or t.stock_name like concat('%', #{keyword}, '%')
+                    or t.note like concat('%', #{keyword}, '%')
+                )
+            </if>
+            <if test="direction != null and direction != ''">and t.direction = #{direction}</if>
+            <if test="resultTag != null and resultTag != ''">and t.result_tag = #{resultTag}</if>
+        </where>
+        order by r.review_date desc, t.trade_id desc
+    </select>
 
     <select id="selectTradesByReviewId" resultMap="StockReviewTradeResult">
         select trade_id, review_id, owner_user_id, stock_code, stock_name, direction,

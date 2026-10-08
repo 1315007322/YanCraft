@@ -1,6 +1,8 @@
 package com.ruoyi.stock.domain;
 
 import java.math.BigDecimal;
+import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.common.core.domain.BaseEntity;
 import com.ruoyi.common.xss.Xss;
 
@@ -38,6 +40,11 @@ public class StockReviewTrade extends BaseEntity
     private Integer sort;
 
     private String delFlag;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date reviewDate;
+
+    private String keyword;
 
     public Long getTradeId()
     {
@@ -169,5 +176,25 @@ public class StockReviewTrade extends BaseEntity
     public void setDelFlag(String delFlag)
     {
         this.delFlag = delFlag;
+    }
+
+    public Date getReviewDate()
+    {
+        return reviewDate;
+    }
+
+    public void setReviewDate(Date reviewDate)
+    {
+        this.reviewDate = reviewDate;
+    }
+
+    public String getKeyword()
+    {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword)
+    {
+        this.keyword = keyword;
     }
 }

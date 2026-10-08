@@ -114,6 +114,17 @@
             </div>
           </template>
           <el-collapse accordion>
+            <el-collapse-item title="YanCraft 博客 1.7.0 - 2026-10-08">
+              <ol>
+                <li>前台预留多套主题方案，站点配置里可带缩略图选择</li>
+              </ol>
+            </el-collapse-item>
+            <el-collapse-item title="股票复盘 1.0.3 - 2026-10-08">
+              <ol>
+                <li>复盘拆成看板预览页和纯编写页</li>
+                <li>看板看月历、统计和当日内容，编写页只负责写和保存</li>
+              </ol>
+            </el-collapse-item>
             <el-collapse-item title="YanCraft 博客 1.6.0 - 2026-10-08">
               <ol>
                 <li>前台移动端增加汉堡菜单与抽屉导航</li>

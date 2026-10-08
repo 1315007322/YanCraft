@@ -76,6 +76,9 @@ public class CmsSiteSetting
 
     private List<CmsNavLink> extraNavLinks;
 
+    @Size(max = 32)
+    private String themeId;
+
     public String getSiteName()
     {
         return siteName;
@@ -294,5 +297,15 @@ public class CmsSiteSetting
     public void setExtraNavLinks(List<CmsNavLink> extraNavLinks)
     {
         this.extraNavLinks = extraNavLinks;
+    }
+
+    public String getThemeId()
+    {
+        return themeId;
+    }
+
+    public void setThemeId(String themeId)
+    {
+        this.themeId = themeId;
     }
 }

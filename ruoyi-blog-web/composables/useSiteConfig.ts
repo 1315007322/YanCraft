@@ -23,7 +23,8 @@ export function defaultSiteSetting(): CmsSiteSetting {
     labEnabled: "0",
     hotLimit: 6,
     homePageSize: 8,
-    extraNavLinks: []
+    extraNavLinks: [],
+    themeId: "paper"
   }
 }
 

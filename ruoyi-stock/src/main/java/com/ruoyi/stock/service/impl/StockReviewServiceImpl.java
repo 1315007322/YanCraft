@@ -55,6 +55,12 @@ public class StockReviewServiceImpl implements IStockReviewService
     }
 
     @Override
+    public List<StockReviewTrade> selectTradeList(StockReviewTrade query)
+    {
+        return stockReviewMapper.selectTradeList(query);
+    }
+
+    @Override
     public StockReview selectReviewById(Long reviewId, Long ownerUserId)
     {
         StockReview review = stockReviewMapper.selectReviewById(reviewId, ownerUserId);

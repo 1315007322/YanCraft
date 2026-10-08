@@ -10,6 +10,7 @@ export interface StockReviewQueryParams extends PageDomain {
 export interface StockReviewTrade {
   tradeId?: number
   reviewId?: number
+  reviewDate?: string
   stockCode?: string
   stockName?: string
   direction?: string
@@ -19,6 +20,12 @@ export interface StockReviewTrade {
   resultTag?: string
   note?: string
   sort?: number
+}
+
+export interface StockTradeQueryParams extends PageDomain {
+  keyword?: string
+  direction?: string
+  resultTag?: string
 }
 
 export interface StockReview extends BaseEntity {

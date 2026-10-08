@@ -203,4 +203,20 @@ public class StockReviewServiceImplTest
         assertEquals("Moutai", rows.get(0).getStockName());
         assertEquals("600000", rows.get(1).getStockCode());
     }
+
+    @Test
+    public void shouldListTradesForCurrentUser()
+    {
+        StockReviewTrade query = new StockReviewTrade();
+        query.setOwnerUserId(1L);
+        query.setKeyword("600519");
+        StockReviewTrade row = new StockReviewTrade();
+        row.setStockCode("600519");
+        when(stockReviewMapper.selectTradeList(query)).thenReturn(Collections.singletonList(row));
+
+        List<StockReviewTrade> rows = stockReviewService.selectTradeList(query);
+        assertEquals(1, rows.size());
+        assertEquals("600519", rows.get(0).getStockCode());
+        verify(stockReviewMapper).selectTradeList(query);
+    }
 }

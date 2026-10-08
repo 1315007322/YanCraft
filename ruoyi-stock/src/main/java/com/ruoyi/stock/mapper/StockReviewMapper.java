@@ -36,6 +36,8 @@ public interface StockReviewMapper
     int deleteReviews(@Param("reviewIds") Long[] reviewIds, @Param("ownerUserId") Long ownerUserId,
             @Param("updateBy") String updateBy);
 
+    List<StockReviewTrade> selectTradeList(StockReviewTrade query);
+
     List<StockReviewTrade> selectTradesByReviewId(@Param("reviewId") Long reviewId,
             @Param("ownerUserId") Long ownerUserId);
 

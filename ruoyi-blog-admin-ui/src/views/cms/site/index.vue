@@ -108,6 +108,16 @@
 
       <el-card shadow="never" class="mb8">
         <template #header>
+          <span>前台主题</span>
+          <span class="card-sub">选一套作为全站外观，下方缩略图对应前台顶栏 + 侧栏布局</span>
+        </template>
+        <el-form-item prop="themeId" label-width="0">
+          <ThemePicker v-model="form.themeId" />
+        </el-form-item>
+      </el-card>
+
+      <el-card shadow="never" class="mb8">
+        <template #header>
           <span>关于我</span>
           <span class="card-sub">影响左侧「关于我」菜单和关于我页面</span>
         </template>
@@ -241,6 +251,7 @@
 import { getSiteSetting, updateSiteSetting } from "@/api/cms/site"
 import type { CmsSiteSetting } from "@/types"
 import HintLabel from "./HintLabel.vue"
+import ThemePicker from "./ThemePicker.vue"
 import resumeTemplate from "./resume.md?raw"
 
 const { proxy } = getCurrentInstance()
@@ -271,7 +282,10 @@ function fillResumeTemplate() {
 
 function load() {
   getSiteSetting().then(res => {
-    form.value = { extraNavLinks: [], ...(res.data || {}) }
+    form.value = { extraNavLinks: [], themeId: "paper", ...(res.data || {}) }
+    if (!form.value.themeId) {
+      form.value.themeId = "paper"
+    }
     if (!form.value.extraNavLinks) {
       form.value.extraNavLinks = []
     }

@@ -23,6 +23,7 @@ import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.stock.domain.StockReview;
 import com.ruoyi.stock.domain.StockReviewTemplate;
+import com.ruoyi.stock.domain.StockReviewTrade;
 import com.ruoyi.stock.service.IStockReviewService;
 
 /**
@@ -89,6 +90,16 @@ public class StockReviewController extends BaseController
     public AjaxResult symbols(@RequestParam(value = "q", required = false) String q)
     {
         return success(stockReviewService.searchSymbols(q, getUserId()));
+    }
+
+    @PreAuthorize("@ss.hasPermi('stock:review:list')")
+    @GetMapping("/trades")
+    public TableDataInfo trades(StockReviewTrade query)
+    {
+        query.setOwnerUserId(getUserId());
+        startPage();
+        List<StockReviewTrade> list = stockReviewService.selectTradeList(query);
+        return getDataTable(list);
     }
 
     @PreAuthorize("@ss.hasPermi('stock:review:query')")

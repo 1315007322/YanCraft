@@ -8,7 +8,8 @@ import type {
   StockReviewStatistics,
   StockReviewTrade,
   StockReviewTemplate,
-  StockSymbol
+  StockSymbol,
+  StockTradeQueryParams
 } from "@/types"
 
 export function listStockReview(query: StockReviewQueryParams): Promise<TableDataInfo<StockReview>> {
@@ -46,6 +47,14 @@ export function getStockReviewCalendar(year: number, month: number): Promise<Aja
     url: "/stock/review/calendar",
     method: "get",
     params: { year, month }
+  })
+}
+
+export function listStockTrades(query: StockTradeQueryParams): Promise<TableDataInfo<StockReviewTrade>> {
+  return request({
+    url: "/stock/review/trades",
+    method: "get",
+    params: query
   })
 }
 
