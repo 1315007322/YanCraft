@@ -66,6 +66,8 @@ if not exist "ruoyi-blog-web\.output\server\index.mjs" (
 :image
 echo.
 echo ========== 4/4 构建镜像并发布到服务器 ==========
+python docker\materialize_blog_output.py
+if errorlevel 1 goto :fail
 docker compose build app
 if errorlevel 1 goto :fail
 

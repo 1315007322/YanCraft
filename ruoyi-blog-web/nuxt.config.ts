@@ -12,7 +12,7 @@ export default defineNuxtConfig({
         { rel: "preconnect", href: "https://fonts.gstatic.com", crossorigin: "" },
         {
           rel: "stylesheet",
-          href: "https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap"
+          href: "https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,7..72,500;0,7..72,650;0,7..72,700;1,7..72,400;1,7..72,500&family=Noto+Serif+SC:wght@500;600;700&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;1,400&display=swap"
         }
       ]
     }

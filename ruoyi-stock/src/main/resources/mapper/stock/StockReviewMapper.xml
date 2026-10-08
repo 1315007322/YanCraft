@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.stock.mapper.StockReviewMapper">
+
+    <resultMap type="StockReview" id="StockReviewResult">
+        <id property="reviewId" column="review_id" />
+        <result property="ownerUserId" column="owner_user_id" />
+        <result property="reviewDate" column="review_date" />
+        <result property="mood" column="mood" />
+        <result property="score" column="score" />
+        <result property="conclusion" column="conclusion" />
+        <result property="mistake" column="mistake" />
+        <result property="nextPlan" column="next_plan" />
+        <result property="delFlag" column="del_flag" />
+        <result property="createBy" column="create_by" />
+        <result property="createTime" column="create_time" />
+        <result property="updateBy" column="update_by" />
+        <result property="updateTime" column="update_time" />
+        <result property="remark" column="remark" />
+        <result property="tradeCount" column="trade_count" />
+    </resultMap>
+
+    <resultMap type="StockReviewTrade" id="StockReviewTradeResult">
+        <id property="tradeId" column="trade_id" />
+        <result property="reviewId" column="review_id" />
+        <result property="ownerUserId" column="owner_user_id" />
+        <result property="stockCode" column="stock_code" />
+        <result property="stockName" column="stock_name" />
+        <result property="direction" column="direction" />
+        <result property="quantity" column="quantity" />
+        <result property="price" column="price" />
+        <result property="profitLoss" column="profit_loss" />
+        <result property="resultTag" column="result_tag" />
+        <result property="note" column="note" />
+        <result property="sort" column="sort" />
+        <result property="delFlag" column="del_flag" />
+        <result property="createBy" column="create_by" />
+        <result property="createTime" column="create_time" />
+        <result property="updateBy" column="update_by" />
+        <result property="updateTime" column="update_time" />
+        <result property="remark" column="remark" />
+    </resultMap>
+
+    <sql id="selectReviewVo">
+        select r.review_id, r.owner_user_id, r.review_date, r.mood, r.score,
+               r.conclusion, r.mistake, r.next_plan, r.del_flag,
+               r.create_by, r.create_time, r.update_by, r.update_time, r.remark,
+               (select count(1) from stock_review_trade t
+                 where t.review_id = r.review_id and t.owner_user_id = r.owner_user_id and t.del_flag = '0') as trade_count
+        from stock_review r
+    </sql>
+
+    <select id="selectReviewList" parameterType="StockReview" resultMap="StockReviewResult">
+        <include refid="selectReviewVo"/>
+        <where>
+            r.del_flag = '0'
+            and r.owner_user_id = #{ownerUserId}
+            <if test="keyword != null and keyword != ''">
+                and (
+                    r.conclusion like concat('%', #{keyword}, '%')
+                    or r.mistake like concat('%', #{keyword}, '%')
+                    or r.next_plan like concat('%', #{keyword}, '%')
+                    or exists (
+                        select 1 from stock_review_trade sk
+                        where sk.review_id = r.review_id
+                          and sk.owner_user_id = r.owner_user_id
+                          and sk.del_flag = '0'
+                          and (sk.stock_code like concat('%', #{keyword}, '%')
+                               or sk.stock_name like concat('%', #{keyword}, '%')
+                               or sk.note like concat('%', #{keyword}, '%'))
+                    )
+                )
+            </if>
+            <if test="mood != null and mood != ''">and r.mood = #{mood}</if>
+            <if test="resultTag != null and resultTag != ''">
+                and exists (
+                    select 1 from stock_review_trade tg
+                    where tg.review_id = r.review_id
+                      and tg.owner_user_id = r.owner_user_id
+                      and tg.del_flag = '0'
+                      and tg.result_tag = #{resultTag}
+                )
+            </if>
+            <if test="params.beginReviewDate != null and params.beginReviewDate != ''">
+                and r.review_date &gt;= #{params.beginReviewDate}
+            </if>
+            <if test="params.endReviewDate != null and params.endReviewDate != ''">
+                and r.review_date &lt;= #{params.endReviewDate}
+            </if>
+        </where>
+        order by r.review_date desc, r.review_id desc
+    </select>
+
+    <select id="selectReviewById" resultMap="StockReviewResult">
+        <include refid="selectReviewVo"/>
+        where r.review_id = #{reviewId}
+          and r.owner_user_id = #{ownerUserId}
+          and r.del_flag = '0'
+    </select>
+
+    <select id="selectReviewByDate" resultMap="StockReviewResult">
+        <include refid="selectReviewVo"/>
+        where r.review_date = #{reviewDate}
+          and r.owner_user_id = #{ownerUserId}
+          and r.del_flag = '0'
+    </select>
+
+    <resultMap type="StockReviewDayMark" id="DayMarkResult">
+        <result property="reviewDate" column="review_date" />
+        <result property="tradeCount" column="trade_count" />
+    </resultMap>
+
+    <select id="selectCalendarMarks" resultMap="DayMarkResult">
+        select r.review_date as review_date,
+               (select count(1) from stock_review_trade t
+                 where t.review_id = r.review_id and t.owner_user_id = r.owner_user_id and t.del_flag = '0') as trade_count
+        from stock_review r
+        where r.owner_user_id = #{ownerUserId}
+          and r.del_flag = '0'
+          and r.review_date &gt;= #{beginDate}
+          and r.review_date &lt;= #{endDate}
+        order by r.review_date asc
+    </select>
+
+    <select id="selectMonthStatistics" resultType="StockReviewStatistics">
+        select count(1) as reviewDays,
+               coalesce(sum(case when exists (
+                   select 1 from stock_review_trade t
+                   where t.review_id = r.review_id and t.owner_user_id = r.owner_user_id and t.del_flag = '0'
+               ) then 1 else 0 end), 0) as tradeDays,
+               coalesce((
+                   select sum(t.profit_loss) from stock_review_trade t
+                   inner join stock_review rr on rr.review_id = t.review_id
+                   where t.owner_user_id = #{ownerUserId}
+                     and t.del_flag = '0'
+                     and rr.del_flag = '0'
+                     and rr.review_date &gt;= #{beginDate}
+                     and rr.review_date &lt;= #{endDate}
+               ), 0) as profitLoss
+        from stock_review r
+        where r.owner_user_id = #{ownerUserId}
+          and r.del_flag = '0'
+          and r.review_date &gt;= #{beginDate}
+          and r.review_date &lt;= #{endDate}
+    </select>
+
+    <select id="selectTopResultTag" resultType="String">
+        select t.result_tag
+        from stock_review_trade t
+        inner join stock_review r on r.review_id = t.review_id
+        where t.owner_user_id = #{ownerUserId}
+          and t.del_flag = '0'
+          and r.del_flag = '0'
+          and t.result_tag is not null
+          and t.result_tag != ''
+          and r.review_date &gt;= #{beginDate}
+          and r.review_date &lt;= #{endDate}
+        group by t.result_tag
+        order by count(1) desc, t.result_tag asc
+        limit 1
+    </select>
+
+    <insert id="insertReview" parameterType="StockReview" useGeneratedKeys="true" keyProperty="reviewId">
+        insert into stock_review (
+            owner_user_id, review_date, mood, score, conclusion, mistake, next_plan,
+            del_flag, create_by, create_time, remark
+        ) values (
+            #{ownerUserId}, #{reviewDate}, #{mood}, #{score}, #{conclusion}, #{mistake}, #{nextPlan},
+            '0', #{createBy}, sysdate(), #{remark}
+        )
+    </insert>
+
+    <update id="updateReview" parameterType="StockReview">
+        update stock_review
+        set mood = #{mood},
+            score = #{score},
+            conclusion = #{conclusion},
+            mistake = #{mistake},
+            next_plan = #{nextPlan},
+            remark = #{remark},
+            update_by = #{updateBy},
+            update_time = sysdate()
+        where review_id = #{reviewId}
+          and owner_user_id = #{ownerUserId}
+          and del_flag = '0'
+    </update>
+
+    <update id="deleteReviews">
+        update stock_review
+        set del_flag = '2',
+            update_by = #{updateBy},
+            update_time = sysdate()
+        where owner_user_id = #{ownerUserId}
+          and del_flag = '0'
+          and review_id in
+        <foreach collection="reviewIds" item="reviewId" open="(" separator="," close=")">
+            #{reviewId}
+        </foreach>
+    </update>
+
+    <select id="selectTradesByReviewId" resultMap="StockReviewTradeResult">
+        select trade_id, review_id, owner_user_id, stock_code, stock_name, direction,
+               quantity, price, profit_loss, result_tag, note, sort, del_flag,
+               create_by, create_time, update_by, update_time, remark
+        from stock_review_trade
+        where review_id = #{reviewId}
+          and owner_user_id = #{ownerUserId}
+          and del_flag = '0'
+        order by sort asc, trade_id asc
+    </select>
+
+    <select id="selectPreviousTrades" resultMap="StockReviewTradeResult">
+        select t.trade_id, t.review_id, t.owner_user_id, t.stock_code, t.stock_name, t.direction,
+               t.quantity, t.price, t.profit_loss, t.result_tag, t.note, t.sort, t.del_flag,
+               t.create_by, t.create_time, t.update_by, t.update_time, t.remark
+        from stock_review_trade t
+        where t.owner_user_id = #{ownerUserId}
+          and t.del_flag = '0'
+          and t.review_id = (
+              select r.review_id from stock_review r
+              where r.owner_user_id = #{ownerUserId}
+                and r.del_flag = '0'
+                and r.review_date &lt; #{beforeDate}
+                and exists (
+                    select 1 from stock_review_trade x
+                    where x.review_id = r.review_id and x.owner_user_id = r.owner_user_id and x.del_flag = '0'
+                )
+              order by r.review_date desc
+              limit 1
+          )
+        order by t.sort asc, t.trade_id asc
+    </select>
+
+    <select id="selectSymbols" resultType="StockSymbol">
+        select t.stock_code as stockCode, max(t.stock_name) as stockName
+        from stock_review_trade t
+        where t.owner_user_id = #{ownerUserId}
+          and t.del_flag = '0'
+          and t.stock_code is not null
+          and t.stock_code != ''
+          <if test="keyword != null and keyword != ''">
+            and (
+                t.stock_code like concat('%', #{keyword}, '%')
+                or t.stock_name like concat('%', #{keyword}, '%')
+            )
+          </if>
+        group by t.stock_code
+        order by max(t.create_time) desc, t.stock_code asc
+        limit #{limit}
+    </select>
+
+    <insert id="insertTrade" parameterType="StockReviewTrade" useGeneratedKeys="true" keyProperty="tradeId">
+        insert into stock_review_trade (
+            review_id, owner_user_id, stock_code, stock_name, direction,
+            quantity, price, profit_loss, result_tag, note, sort, del_flag,
+            create_by, create_time, remark
+        ) values (
+            #{reviewId}, #{ownerUserId}, #{stockCode}, #{stockName}, #{direction},
+            #{quantity}, #{price}, #{profitLoss}, #{resultTag}, #{note}, #{sort}, '0',
+            #{createBy}, sysdate(), #{remark}
+        )
+    </insert>
+
+    <update id="updateTrade" parameterType="StockReviewTrade">
+        update stock_review_trade
+        set stock_code = #{stockCode},
+            stock_name = #{stockName},
+            direction = #{direction},
+            quantity = #{quantity},
+            price = #{price},
+            profit_loss = #{profitLoss},
+            result_tag = #{resultTag},
+            note = #{note},
+            sort = #{sort},
+            update_by = #{updateBy},
+            update_time = sysdate()
+        where trade_id = #{tradeId}
+          and review_id = #{reviewId}
+          and owner_user_id = #{ownerUserId}
+          and del_flag = '0'
+    </update>
+
+    <update id="deleteTradesNotIn">
+        update stock_review_trade
+        set del_flag = '2',
+            update_by = #{updateBy},
+            update_time = sysdate()
+        where review_id = #{reviewId}
+          and owner_user_id = #{ownerUserId}
+          and del_flag = '0'
+        <if test="keepIds != null and keepIds.size() &gt; 0">
+            and trade_id not in
+            <foreach collection="keepIds" item="tradeId" open="(" separator="," close=")">
+                #{tradeId}
+            </foreach>
+        </if>
+    </update>
+
+    <update id="deleteTradesByReviewIds">
+        update stock_review_trade
+        set del_flag = '2',
+            update_by = #{updateBy},
+            update_time = sysdate()
+        where owner_user_id = #{ownerUserId}
+          and del_flag = '0'
+          and review_id in
+        <foreach collection="reviewIds" item="reviewId" open="(" separator="," close=")">
+            #{reviewId}
+        </foreach>
+    </update>
+</mapper>

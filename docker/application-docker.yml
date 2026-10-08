@@ -14,3 +14,15 @@ logging:
   level:
     com.ruoyi: info
     org.springframework: warn
+
+cdn:
+  oss:
+    active: true
+    bucket: ${OSS_BUCKET:yhfoinone}
+    uploadUrl: ${OSS_UPLOAD_URL:oss-cn-beijing.aliyuncs.com}
+    downloadUrl: ${OSS_DOWNLOAD_URL:oss-cn-beijing.aliyuncs.com}
+    accessKeyId: ${OSS_ACCESS_KEY_ID:}
+    accessKeySecret: ${OSS_ACCESS_KEY_SECRET:}
+    mainDir: ${OSS_MAIN_DIR:upload/}
+    validTime: 3600000
+    timeout: 600000

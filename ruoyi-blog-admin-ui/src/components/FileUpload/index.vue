@@ -29,7 +29,7 @@
     <!-- 文件列表 -->
     <transition-group ref="uploadFileList" class="upload-file-list el-upload-list el-upload-list--text" name="el-fade-in-linear" tag="ul">
       <li :key="file.uid" class="el-upload-list__item ele-upload-list__item-content" v-for="(file, index) in fileList">
-        <el-link :href="`${baseUrl}${file.url}`" underline="never" target="_blank">
+        <el-link :href="fileHref(file.url)" underline="never" target="_blank">
           <span class="el-icon-document"> {{ getFileName(file.name) }} </span>
         </el-link>
         <div class="ele-upload-list__item-content-action">
@@ -42,6 +42,7 @@
 
 <script setup lang="ts">
 import { getToken } from "@/utils/auth"
+import { isExternal } from "@/utils/validate"
 import Sortable from 'sortablejs'
 import type { UploadFileResult } from '@/types/api/common'
 
@@ -166,10 +167,25 @@ function handleUploadError(err: Error): void {
   proxy.$modal.closeLoading()
 }
 
+function publicUploadPath(res: UploadFileResult): string {
+  if (isExternal(res.url)) {
+    return res.url
+  }
+  if (isExternal(res.fileName)) {
+    return res.fileName
+  }
+  return res.fileName
+}
+
+function fileHref(url: string): string {
+  return isExternal(url) ? url : `${baseUrl}${url}`
+}
+
 // 上传成功回调
 function handleUploadSuccess(res: UploadFileResult, file: any): void {
   if (res.code === 200) {
-    uploadList.value.push({ name: res.fileName, url: res.fileName })
+    const path = publicUploadPath(res)
+    uploadList.value.push({ name: path, url: path })
     uploadedSuccessfully()
   } else {
     number.value--

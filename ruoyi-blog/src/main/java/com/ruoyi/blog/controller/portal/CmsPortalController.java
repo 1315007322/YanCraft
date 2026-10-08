@@ -11,10 +11,12 @@ import com.ruoyi.blog.constant.CmsConstants;
 import com.ruoyi.blog.domain.CmsArticle;
 import com.ruoyi.blog.domain.CmsCategory;
 import com.ruoyi.blog.domain.CmsFriendLink;
+import com.ruoyi.blog.domain.CmsLabProject;
 import com.ruoyi.blog.domain.CmsTag;
 import com.ruoyi.blog.service.ICmsArticleService;
 import com.ruoyi.blog.service.ICmsCategoryService;
 import com.ruoyi.blog.service.ICmsFriendLinkService;
+import com.ruoyi.blog.service.ICmsLabProjectService;
 import com.ruoyi.blog.service.ICmsSiteConfigService;
 import com.ruoyi.blog.service.ICmsTagService;
 import com.ruoyi.common.annotation.Anonymous;
@@ -43,6 +45,9 @@ public class CmsPortalController extends BaseController
 
     @Autowired
     private ICmsFriendLinkService friendLinkService;
+
+    @Autowired
+    private ICmsLabProjectService labProjectService;
 
     @Autowired
     private ICmsSiteConfigService siteConfigService;
@@ -125,5 +130,16 @@ public class CmsPortalController extends BaseController
     public AjaxResult site()
     {
         return success(siteConfigService.getSetting());
+    }
+
+    /**
+     * 启用中的实验室项目，按排序返回。
+     */
+    @GetMapping("/lab/list")
+    public AjaxResult labList()
+    {
+        CmsLabProject query = new CmsLabProject();
+        query.setStatus(CmsConstants.STATUS_OK);
+        return success(labProjectService.selectLabProjectList(query));
     }
 }

@@ -2,10 +2,13 @@
 docker/deploy.env
 .idea
 *.iml
-**/node_modules
+ruoyi-blog-admin-ui/node_modules
+ruoyi-blog-web/node_modules
+ruoyi-blog-web/.output
 **/.nuxt
 **/*.log
 ruoyi-admin/src/main/resources/application-druid.yml
+ruoyi-admin/src/main/resources/application-oss.yml
 ruoyi-common/target
 ruoyi-system/target
 ruoyi-framework/target

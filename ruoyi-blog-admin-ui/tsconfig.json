@@ -6,7 +6,9 @@
     "lib": ["esnext", "dom"],
     "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@yancraft-src/*": ["../../前端组件平台/packages/vue/src/*"],
+      "@yancraft/vue": ["src/shims/yancraft-vue.ts"]
     },
 
     // 严格性和类型检查相关配置

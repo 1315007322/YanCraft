@@ -59,6 +59,16 @@ export interface CmsFriendLink {
   sort?: number
 }
 
+export interface CmsLabProject {
+  projectId?: number
+  projectName?: string
+  description?: string
+  repoUrl?: string
+  previewUrl?: string
+  cover?: string
+  sort?: number
+}
+
 export interface CmsSiteSetting {
   siteName?: string
   logoPrefix?: string
@@ -78,6 +88,7 @@ export interface CmsSiteSetting {
   searchEnabled?: string
   categoryEnabled?: string
   friendLinkEnabled?: string
+  labEnabled?: string
   hotLimit?: number
   homePageSize?: number
   extraNavLinks?: CmsNavLink[]

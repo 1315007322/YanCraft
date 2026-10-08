@@ -20,8 +20,12 @@ export default defineConfig(({ mode, command }) => {
         // 设置路径
         '~': path.resolve(__dirname, './'),
         // 设置别名
-        '@': path.resolve(__dirname, './src')
+        '@': path.resolve(__dirname, './src'),
+        // 走源码中的 CodeEditor，避免包入口把 ant-design-vue 一并拉进来
+        '@yancraft-src': path.resolve(__dirname, '../../前端组件平台/packages/vue/src'),
+        '@yancraft/vue': path.resolve(__dirname, './src/shims/yancraft-vue.ts')
       },
+      dedupe: ['vue', 'element-plus'],
       // https://cn.vitejs.dev/config/#resolve-extensions
       extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue']
     },
@@ -45,6 +49,12 @@ export default defineConfig(({ mode, command }) => {
       port: 80,
       host: true,
       open: true,
+      fs: {
+        allow: [
+          path.resolve(__dirname),
+          path.resolve(__dirname, '../../前端组件平台')
+        ]
+      },
       proxy: {
         // https://cn.vitejs.dev/config/#server-proxy
         '/dev-api': {
@@ -58,6 +68,9 @@ export default defineConfig(({ mode, command }) => {
           changeOrigin: true,
         }
       }
+    },
+    optimizeDeps: {
+      exclude: ['@yancraft/vue']
     },
     css: {
       postcss: {

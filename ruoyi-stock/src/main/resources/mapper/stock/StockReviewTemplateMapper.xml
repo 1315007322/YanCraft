@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.stock.mapper.StockReviewTemplateMapper">
+
+    <resultMap type="StockReviewTemplate" id="TemplateResult">
+        <id property="templateId" column="template_id" />
+        <result property="ownerUserId" column="owner_user_id" />
+        <result property="templateCode" column="template_code" />
+        <result property="templateName" column="template_name" />
+        <result property="summary" column="summary" />
+        <result property="mood" column="mood" />
+        <result property="score" column="score" />
+        <result property="conclusion" column="conclusion" />
+        <result property="mistake" column="mistake" />
+        <result property="nextPlan" column="next_plan" />
+        <result property="sort" column="sort" />
+        <result property="delFlag" column="del_flag" />
+        <result property="createBy" column="create_by" />
+        <result property="createTime" column="create_time" />
+        <result property="updateBy" column="update_by" />
+        <result property="updateTime" column="update_time" />
+        <result property="remark" column="remark" />
+        <result property="systemTemplate" column="system_template" />
+    </resultMap>
+
+    <select id="selectTemplateList" resultMap="TemplateResult">
+        select template_id, owner_user_id, template_code, template_name, summary, mood, score,
+               conclusion, mistake, next_plan, sort, del_flag,
+               create_by, create_time, update_by, update_time, remark,
+               case when owner_user_id = 0 then 1 else 0 end as system_template
+        from stock_review_template
+        where del_flag = '0'
+          and (owner_user_id = 0 or owner_user_id = #{ownerUserId})
+        order by owner_user_id asc, sort asc, template_id asc
+    </select>
+
+    <select id="selectTemplateById" resultMap="TemplateResult">
+        select template_id, owner_user_id, template_code, template_name, summary, mood, score,
+               conclusion, mistake, next_plan, sort, del_flag,
+               create_by, create_time, update_by, update_time, remark,
+               case when owner_user_id = 0 then 1 else 0 end as system_template
+        from stock_review_template
+        where template_id = #{templateId}
+          and del_flag = '0'
+          and (owner_user_id = 0 or owner_user_id = #{ownerUserId})
+    </select>
+
+    <insert id="insertTemplate" parameterType="StockReviewTemplate" useGeneratedKeys="true" keyProperty="templateId">
+        insert into stock_review_template (
+            owner_user_id, template_code, template_name, summary, mood, score,
+            conclusion, mistake, next_plan, sort, del_flag, create_by, create_time, remark
+        ) values (
+            #{ownerUserId}, #{templateCode}, #{templateName}, #{summary}, #{mood}, #{score},
+            #{conclusion}, #{mistake}, #{nextPlan}, #{sort}, '0', #{createBy}, sysdate(), #{remark}
+        )
+    </insert>
+
+    <update id="deleteTemplate">
+        update stock_review_template
+        set del_flag = '2',
+            update_by = #{updateBy},
+            update_time = sysdate()
+        where template_id = #{templateId}
+          and owner_user_id = #{ownerUserId}
+          and owner_user_id != 0
+          and del_flag = '0'
+    </update>
+</mapper>

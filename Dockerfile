@@ -6,7 +6,7 @@ RUN apt-get update \
 COPY --from=node:20-bookworm-slim /usr/local/bin/node /usr/local/bin/node
 COPY ruoyi-admin/target/ruoyi-admin.jar /app/ruoyi-admin.jar
 COPY ruoyi-blog-admin-ui/dist /usr/share/nginx/html/admin
-COPY ruoyi-blog-web/.output /app/blog/.output
+COPY ruoyi-blog-web/.output-docker /app/blog/.output
 COPY docker/nginx.conf /etc/nginx/nginx.conf
 COPY docker/entrypoint.sh /app/entrypoint.sh
 COPY docker/application-druid.yml /app/config/application-druid.yml

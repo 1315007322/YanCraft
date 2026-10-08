@@ -35,6 +35,8 @@ import Pagination from '@/components/Pagination/index.vue'
 import RightToolbar from '@/components/RightToolbar/index.vue'
 // 富文本组件
 import Editor from "@/components/Editor/index.vue"
+// Markdown 组件（@yancraft/vue CodeEditor）
+import MarkdownEditor from "@/components/MarkdownEditor/index.vue"
 // 文件上传组件
 import FileUpload from "@/components/FileUpload/index.vue"
 // 图片上传组件
@@ -65,6 +67,7 @@ app.component('ImageUpload', ImageUpload)
 app.component('ImagePreview', ImagePreview)
 app.component('RightToolbar', RightToolbar)
 app.component('Editor', Editor)
+app.component('MarkdownEditor', MarkdownEditor)
 
 app.use(router)
 app.use(store)

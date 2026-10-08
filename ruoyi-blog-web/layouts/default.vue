@@ -1,16 +1,30 @@
 <template>
-  <div class="page">
+  <div class="page" :class="{ 'is-nav-open': navOpen }">
     <header class="topbar">
       <div class="topbar-inner">
-        <NuxtLink to="/" class="logo">{{ site.logoPrefix }}<b>{{ site.logoHighlight }}</b></NuxtLink>
+        <div class="brand-row">
+          <button
+            class="menu-toggle"
+            type="button"
+            :aria-expanded="navOpen"
+            aria-controls="site-sidenav"
+            :aria-label="navOpen ? '收起菜单' : '打开菜单'"
+            @click="toggleNav"
+          >
+            <X v-if="navOpen" :size="22" :stroke-width="2" />
+            <Menu v-else :size="22" :stroke-width="2" />
+          </button>
+          <NuxtLink to="/" class="logo" @click="closeNav">{{ site.logoPrefix }}<b>{{ site.logoHighlight }}</b></NuxtLink>
+        </div>
         <form v-if="isEnabled(site.searchEnabled)" class="search-box" @submit.prevent="onSearch">
           <input v-model="keywordInput" type="search" :placeholder="'搜索'" />
           <button type="submit">搜索</button>
         </form>
       </div>
     </header>
+    <div class="nav-mask" :class="{ show: navOpen }" @click="closeNav" />
     <div class="shell">
-      <aside class="panel sidenav">
+      <aside id="site-sidenav" class="panel sidenav">
         <div class="profile">
           <div class="avatar">
             <img v-if="site.avatarUrl" :src="mediaUrl(site.avatarUrl)" :alt="site.author || site.siteName" />
@@ -21,7 +35,7 @@
             <span v-if="site.authorSignature">{{ site.authorSignature }}</span>
           </div>
         </div>
-        <nav>
+        <nav @click="onNavClick">
           <ul class="nav-list">
             <li>
               <NuxtLink to="/" exact-active-class="active" active-class="is-partial">
@@ -33,6 +47,12 @@
               <NuxtLink to="/about" exact-active-class="active" active-class="is-partial">
                 <User :size="20" :stroke-width="2" />
                 <span>关于我</span>
+              </NuxtLink>
+            </li>
+            <li v-if="isEnabled(site.labEnabled)">
+              <NuxtLink to="/lab" exact-active-class="active" active-class="is-partial">
+                <FlaskConical :size="20" :stroke-width="2" />
+                <span>实验室</span>
               </NuxtLink>
             </li>
             <li v-for="item in extraNavs" :key="item.name + (item.url || '')">
@@ -98,7 +118,7 @@
               <i class="dot" />
               <NuxtLink :to="articlePath(item)">{{ item.title }}</NuxtLink>
             </li>
-            <li v-if="!hot.length" style="color:#8a9099">暂无</li>
+            <li v-if="!hot.length" class="hot-empty">暂无</li>
           </ul>
         </div>
         <div class="rail-block">
@@ -133,7 +153,7 @@
 </template>
 
 <script setup lang="ts">
-import { ChevronDown, ExternalLink, Folder, House, Link as LinkIcon, User } from "lucide-vue-next"
+import { ChevronDown, ExternalLink, FlaskConical, Folder, House, Link as LinkIcon, Menu, User, X } from "lucide-vue-next"
 
 const route = useRoute()
 const router = useRouter()
@@ -166,6 +186,57 @@ const extraNavs = computed(() =>
 )
 const categoryOpen = ref(true)
 const linkOpen = ref(true)
+
+const navOpen = ref(false)
+const mediaQuery = "(max-width: 800px)"
+
+function isMobileNav() {
+  return import.meta.client && window.matchMedia(mediaQuery).matches
+}
+
+function toggleNav() {
+  navOpen.value = !navOpen.value
+}
+
+function closeNav() {
+  navOpen.value = false
+}
+
+function onNavClick(event: Event) {
+  const target = event.target as HTMLElement | null
+  if (target && target.closest("a")) {
+    window.setTimeout(closeNav, 0)
+  }
+}
+
+function syncBodyScroll() {
+  if (!import.meta.client) return
+  document.body.style.overflow = navOpen.value && isMobileNav() ? "hidden" : ""
+}
+
+watch(() => route.fullPath, closeNav)
+
+watch(navOpen, syncBodyScroll)
+
+function onKeydown(event: KeyboardEvent) {
+  if (event.key === "Escape") closeNav()
+}
+
+function onResize() {
+  if (!isMobileNav()) closeNav()
+}
+
+onMounted(() => {
+  window.addEventListener("keydown", onKeydown)
+  window.addEventListener("resize", onResize)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener("keydown", onKeydown)
+  window.removeEventListener("resize", onResize)
+  if (import.meta.client) document.body.style.overflow = ""
+})
+
 const isCategorySection = computed(() => route.path.startsWith("/category/"))
 
 watch(isCategorySection, (on) => {

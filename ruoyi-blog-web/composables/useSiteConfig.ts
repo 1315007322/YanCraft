@@ -20,6 +20,7 @@ export function defaultSiteSetting(): CmsSiteSetting {
     searchEnabled: "0",
     categoryEnabled: "0",
     friendLinkEnabled: "0",
+    labEnabled: "0",
     hotLimit: 6,
     homePageSize: 8,
     extraNavLinks: []

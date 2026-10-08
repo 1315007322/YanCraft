@@ -114,6 +114,55 @@
             </div>
           </template>
           <el-collapse accordion>
+            <el-collapse-item title="YanCraft 博客 1.6.0 - 2026-10-08">
+              <ol>
+                <li>前台移动端增加汉堡菜单与抽屉导航</li>
+                <li>前台视觉改为暖纸朱印风格</li>
+              </ol>
+            </el-collapse-item>
+            <el-collapse-item title="股票复盘 1.0.2 - 2026-10-08">
+              <ol>
+                <li>当日交易支持按股票代码或名称搜索下拉</li>
+              </ol>
+            </el-collapse-item>
+            <el-collapse-item title="股票复盘 1.0.1 - 2026-09-29">
+              <ol>
+                <li>复盘模板：系统预置五类交易日，也可保存自己的模板</li>
+              </ol>
+            </el-collapse-item>
+            <el-collapse-item title="股票复盘 1.0.0 - 2026-09-29">
+              <ol>
+                <li>新增个人每日股票复盘：月历、结论三栏、可选交易明细</li>
+                <li>每用户每日一行，不做行情和券商接入</li>
+              </ol>
+            </el-collapse-item>
+            <el-collapse-item title="YanCraft 博客 1.5.2 - 2026-09-28">
+              <ol>
+                <li>前台文章 Markdown 表格补齐边框和横向滚动</li>
+              </ol>
+            </el-collapse-item>
+            <el-collapse-item title="YanCraft 博客 1.5.1 - 2026-09-22">
+              <ol>
+                <li>后台 Markdown 编辑器改用 @yancraft/vue 分栏预览</li>
+              </ol>
+            </el-collapse-item>
+            <el-collapse-item title="YanCraft 博客 1.5.0 - 2026-09-21">
+              <ol>
+                <li>实验室：后台维护项目，前台卡片页展示</li>
+                <li>附件上传支持阿里云 OSS 与 CDN</li>
+              </ol>
+            </el-collapse-item>
+            <el-collapse-item title="个人任务 1.0.1 - 2026-09-21">
+              <ol>
+                <li>叶子任务按总量和已完成数量自动计算进度</li>
+              </ol>
+            </el-collapse-item>
+            <el-collapse-item title="个人任务 1.0.0 - 2026-09-21">
+              <ol>
+                <li>新增个人两级任务管理：状态、优先级、进度汇总</li>
+                <li>按当前登录用户隔离数据</li>
+              </ol>
+            </el-collapse-item>
             <el-collapse-item title="v3.9.2 - 2026-03-26">
               <ol>
                 <li>新增锁定屏幕功能</li>

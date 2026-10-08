@@ -1,4 +1,4 @@
-import type { AjaxResult, ArticleListQuery, CmsArticle, CmsCategory, CmsFriendLink, CmsSiteSetting, CmsTag, TableDataInfo } from "~/types/cms"
+import type { AjaxResult, ArticleListQuery, CmsArticle, CmsCategory, CmsFriendLink, CmsLabProject, CmsSiteSetting, CmsTag, TableDataInfo } from "~/types/cms"
 
 function apiPrefix() {
   const config = useRuntimeConfig()
@@ -38,15 +38,18 @@ export async function fetchArticleList(query: ArticleListQuery = {}) {
 
 export async function fetchArticleByKey(key: string) {
   const encoded = encodeURIComponent(key)
+  if (/^\d+$/.test(key)) {
+    try {
+      const byId = await $fetch<AjaxResult<CmsArticle>>(`${apiPrefix()}/portal/cms/article/${key}`)
+      if (byId.code === 200 && byId.data) {
+        return byId
+      }
+    } catch {
+      // fall through to slug lookup
+    }
+  }
   try {
-    const bySlug = await $fetch<AjaxResult<CmsArticle>>(`${apiPrefix()}/portal/cms/article/slug/${encoded}`)
-    if (bySlug.code === 200 && bySlug.data) {
-      return bySlug
-    }
-    if (/^\d+$/.test(key)) {
-      return await $fetch<AjaxResult<CmsArticle>>(`${apiPrefix()}/portal/cms/article/${key}`)
-    }
-    return bySlug
+    return await $fetch<AjaxResult<CmsArticle>>(`${apiPrefix()}/portal/cms/article/slug/${encoded}`)
   } catch {
     return { code: 500, msg: "unavailable" } as AjaxResult<CmsArticle>
   }
@@ -81,6 +84,14 @@ export async function fetchTags() {
 export async function fetchFriendLinks() {
   try {
     return await $fetch<AjaxResult<CmsFriendLink[]>>(`${apiPrefix()}/portal/cms/link/list`)
+  } catch {
+    return { code: 500, msg: "unavailable", data: [] }
+  }
+}
+
+export async function fetchLabProjects() {
+  try {
+    return await $fetch<AjaxResult<CmsLabProject[]>>(`${apiPrefix()}/portal/cms/lab/list`)
   } catch {
     return { code: 500, msg: "unavailable", data: [] }
   }

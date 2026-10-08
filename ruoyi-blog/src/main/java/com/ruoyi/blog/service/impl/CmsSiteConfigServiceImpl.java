@@ -43,6 +43,7 @@ public class CmsSiteConfigServiceImpl implements ICmsSiteConfigService
     private static final String KEY_SEARCH_ENABLED = "searchEnabled";
     private static final String KEY_CATEGORY_ENABLED = "categoryEnabled";
     private static final String KEY_FRIEND_LINK_ENABLED = "friendLinkEnabled";
+    private static final String KEY_LAB_ENABLED = "labEnabled";
     private static final String KEY_HOT_LIMIT = "hotLimit";
     private static final String KEY_HOME_PAGE_SIZE = "homePageSize";
     private static final String KEY_EXTRA_NAV_LINKS = "extraNavLinks";
@@ -76,6 +77,7 @@ public class CmsSiteConfigServiceImpl implements ICmsSiteConfigService
         setting.setSearchEnabled(flag(map, KEY_SEARCH_ENABLED));
         setting.setCategoryEnabled(flag(map, KEY_CATEGORY_ENABLED));
         setting.setFriendLinkEnabled(flag(map, KEY_FRIEND_LINK_ENABLED));
+        setting.setLabEnabled(flag(map, KEY_LAB_ENABLED));
         setting.setHotLimit(num(map, KEY_HOT_LIMIT, 6));
         setting.setHomePageSize(num(map, KEY_HOME_PAGE_SIZE, 8));
         setting.setExtraNavLinks(parseNavLinks(map.get(KEY_EXTRA_NAV_LINKS)));
@@ -107,6 +109,7 @@ public class CmsSiteConfigServiceImpl implements ICmsSiteConfigService
         rows += upsert(KEY_SEARCH_ENABLED, enabled(setting.getSearchEnabled()));
         rows += upsert(KEY_CATEGORY_ENABLED, enabled(setting.getCategoryEnabled()));
         rows += upsert(KEY_FRIEND_LINK_ENABLED, enabled(setting.getFriendLinkEnabled()));
+        rows += upsert(KEY_LAB_ENABLED, enabled(setting.getLabEnabled()));
         rows += upsert(KEY_HOT_LIMIT, setting.getHotLimit() == null ? "6" : String.valueOf(setting.getHotLimit()));
         rows += upsert(KEY_HOME_PAGE_SIZE, setting.getHomePageSize() == null ? "8" : String.valueOf(setting.getHomePageSize()));
         rows += upsert(KEY_EXTRA_NAV_LINKS, JSON.toJSONString(normalizeNavLinks(setting.getExtraNavLinks())));

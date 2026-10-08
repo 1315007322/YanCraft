@@ -58,7 +58,10 @@
         </el-col>
         <el-col :span="24">
           <el-form-item label="正文" prop="content">
-            <el-input v-model="form.content" type="textarea" :rows="22" placeholder="请输入 Markdown 正文，字数和阅读时长保存时自动计算" />
+            <markdown-editor
+              v-model="form.content"
+              placeholder="请输入 Markdown 正文，字数和阅读时长保存时自动计算"
+            />
           </el-form-item>
         </el-col>
         <el-col :span="12" v-if="form.articleId">

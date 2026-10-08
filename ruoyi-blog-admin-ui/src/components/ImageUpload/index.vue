@@ -178,10 +178,21 @@ function handleExceed(): void {
   proxy.$modal.msgError(`上传文件数量不能超过 ${props.limit} 个!`)
 }
 
+function publicUploadPath(res: UploadFileResult): string {
+  if (isExternal(res.url)) {
+    return res.url
+  }
+  if (isExternal(res.fileName)) {
+    return res.fileName
+  }
+  return res.fileName
+}
+
 // 上传成功回调
 function handleUploadSuccess(res: UploadFileResult, file: any): void {
   if (res.code === 200) {
-    uploadList.value.push({ name: res.fileName, url: res.fileName })
+    const path = publicUploadPath(res)
+    uploadList.value.push({ name: path, url: path })
     uploadedSuccessfully()
   } else {
     number.value--

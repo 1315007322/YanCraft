@@ -104,7 +104,25 @@ def remote_env_body(env):
         "MYSQL_USER={MYSQL_USER}\n"
         "MYSQL_PASSWORD={MYSQL_PASSWORD}\n"
         "MYSQL_URL={MYSQL_URL}\n"
-    ).format(**env)
+        "OSS_BUCKET={OSS_BUCKET}\n"
+        "OSS_UPLOAD_URL={OSS_UPLOAD_URL}\n"
+        "OSS_DOWNLOAD_URL={OSS_DOWNLOAD_URL}\n"
+        "OSS_ACCESS_KEY_ID={OSS_ACCESS_KEY_ID}\n"
+        "OSS_ACCESS_KEY_SECRET={OSS_ACCESS_KEY_SECRET}\n"
+        "OSS_MAIN_DIR={OSS_MAIN_DIR}\n"
+    ).format(
+        MYSQL_HOST=env["MYSQL_HOST"],
+        MYSQL_PORT=env["MYSQL_PORT"],
+        MYSQL_USER=env["MYSQL_USER"],
+        MYSQL_PASSWORD=env["MYSQL_PASSWORD"],
+        MYSQL_URL=env["MYSQL_URL"],
+        OSS_BUCKET=env.get("OSS_BUCKET") or "yhfoinone",
+        OSS_UPLOAD_URL=env.get("OSS_UPLOAD_URL") or "oss-cn-beijing.aliyuncs.com",
+        OSS_DOWNLOAD_URL=env.get("OSS_DOWNLOAD_URL") or "oss-cn-beijing.aliyuncs.com",
+        OSS_ACCESS_KEY_ID=env.get("OSS_ACCESS_KEY_ID") or "",
+        OSS_ACCESS_KEY_SECRET=env.get("OSS_ACCESS_KEY_SECRET") or "",
+        OSS_MAIN_DIR=env.get("OSS_MAIN_DIR") or "upload/",
+    )
 
 
 def upload(env, archive):

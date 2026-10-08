@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.task.mapper.TaskItemMapper">
+
+    <resultMap type="TaskItem" id="TaskItemResult">
+        <id property="taskId" column="task_id" />
+        <result property="parentId" column="parent_id" />
+        <result property="ownerUserId" column="owner_user_id" />
+        <result property="taskName" column="task_name" />
+        <result property="description" column="description" />
+        <result property="status" column="status" />
+        <result property="priority" column="priority" />
+        <result property="progress" column="progress" />
+        <result property="totalQuantity" column="total_quantity" />
+        <result property="completedQuantity" column="completed_quantity" />
+        <result property="planStartDate" column="plan_start_date" />
+        <result property="dueDate" column="due_date" />
+        <result property="completedTime" column="completed_time" />
+        <result property="sort" column="sort" />
+        <result property="delFlag" column="del_flag" />
+        <result property="createBy" column="create_by" />
+        <result property="createTime" column="create_time" />
+        <result property="updateBy" column="update_by" />
+        <result property="updateTime" column="update_time" />
+        <result property="remark" column="remark" />
+        <result property="overdue" column="overdue" />
+        <result property="hasChildren" column="has_children" />
+    </resultMap>
+
+    <sql id="selectTaskVo">
+        select t.task_id, t.parent_id, t.owner_user_id, t.task_name, t.description,
+               t.status, t.priority, t.progress, t.total_quantity, t.completed_quantity,
+               t.plan_start_date, t.due_date,
+               t.completed_time, t.sort, t.del_flag, t.create_by, t.create_time,
+               t.update_by, t.update_time, t.remark,
+               case when t.due_date &lt; curdate() and t.status not in ('2', '3') then 1 else 0 end as overdue,
+               case when exists (
+                   select 1 from task_item c
+                   where c.parent_id = t.task_id and c.owner_user_id = t.owner_user_id and c.del_flag = '0'
+               ) then 1 else 0 end as has_children
+        from task_item t
+    </sql>
+
+    <select id="selectRootTaskList" parameterType="TaskItem" resultMap="TaskItemResult">
+        <include refid="selectTaskVo"/>
+        <where>
+            t.del_flag = '0'
+            and t.parent_id = 0
+            and t.owner_user_id = #{ownerUserId}
+            <if test="keyword != null and keyword != ''">
+                and (
+                    t.task_name like concat('%', #{keyword}, '%')
+                    or t.description like concat('%', #{keyword}, '%')
+                    or exists (
+                        select 1 from task_item sk
+                        where sk.parent_id = t.task_id
+                          and sk.owner_user_id = t.owner_user_id
+                          and sk.del_flag = '0'
+                          and (sk.task_name like concat('%', #{keyword}, '%')
+                               or sk.description like concat('%', #{keyword}, '%'))
+                    )
+                )
+            </if>
+            <if test="status != null and status != ''">and t.status = #{status}</if>
+            <if test="priority != null and priority != ''">and t.priority = #{priority}</if>
+            <if test="params.beginDueDate != null and params.beginDueDate != ''">
+                and t.due_date &gt;= #{params.beginDueDate}
+            </if>
+            <if test="params.endDueDate != null and params.endDueDate != ''">
+                and t.due_date &lt;= #{params.endDueDate}
+            </if>
+        </where>
+        order by t.sort asc, t.due_date is null asc, t.due_date asc, t.task_id desc
+    </select>
+
+    <select id="selectChildrenByParentIds" resultMap="TaskItemResult">
+        <include refid="selectTaskVo"/>
+        where t.del_flag = '0'
+          and t.owner_user_id = #{ownerUserId}
+          and t.parent_id in
+        <foreach collection="parentIds" item="parentId" open="(" separator="," close=")">
+            #{parentId}
+        </foreach>
+        order by t.sort asc, t.due_date is null asc, t.due_date asc, t.task_id asc
+    </select>
+
+    <select id="selectTaskById" resultMap="TaskItemResult">
+        <include refid="selectTaskVo"/>
+        where t.task_id = #{taskId}
+          and t.owner_user_id = #{ownerUserId}
+          and t.del_flag = '0'
+    </select>
+
+    <select id="selectTaskByIds" resultMap="TaskItemResult">
+        <include refid="selectTaskVo"/>
+        where t.owner_user_id = #{ownerUserId}
+          and t.del_flag = '0'
+          and t.task_id in
+        <foreach collection="taskIds" item="taskId" open="(" separator="," close=")">
+            #{taskId}
+        </foreach>
+    </select>
+
+    <select id="selectRootOptions" resultMap="TaskItemResult">
+        <include refid="selectTaskVo"/>
+        where t.owner_user_id = #{ownerUserId}
+          and t.parent_id = 0
+          and t.del_flag = '0'
+        <if test="excludeTaskId != null">and t.task_id != #{excludeTaskId}</if>
+        order by t.sort asc, t.task_id desc
+    </select>
+
+    <select id="countChildren" resultType="int">
+        select count(1) from task_item
+        where parent_id = #{taskId}
+          and owner_user_id = #{ownerUserId}
+          and del_flag = '0'
+    </select>
+
+    <select id="selectAverageChildProgress" resultType="Integer">
+        select round(avg(progress)) from task_item
+        where parent_id = #{taskId}
+          and owner_user_id = #{ownerUserId}
+          and del_flag = '0'
+    </select>
+
+    <insert id="insertTask" parameterType="TaskItem" useGeneratedKeys="true" keyProperty="taskId">
+        insert into task_item (
+            parent_id, owner_user_id, task_name, description, status, priority, progress,
+            total_quantity, completed_quantity,
+            plan_start_date, due_date, completed_time, sort, del_flag,
+            create_by, create_time, remark
+        ) values (
+            #{parentId}, #{ownerUserId}, #{taskName}, #{description}, #{status}, #{priority}, #{progress},
+            #{totalQuantity}, #{completedQuantity},
+            #{planStartDate}, #{dueDate}, #{completedTime}, #{sort}, '0',
+            #{createBy}, sysdate(), #{remark}
+        )
+    </insert>
+
+    <update id="updateTask" parameterType="TaskItem">
+        update task_item
+        set parent_id = #{parentId},
+            task_name = #{taskName},
+            description = #{description},
+            status = #{status},
+            priority = #{priority},
+            progress = #{progress},
+            total_quantity = #{totalQuantity},
+            completed_quantity = #{completedQuantity},
+            plan_start_date = #{planStartDate},
+            due_date = #{dueDate},
+            completed_time = #{completedTime},
+            sort = #{sort},
+            update_by = #{updateBy},
+            update_time = sysdate(),
+            remark = #{remark}
+        where task_id = #{taskId}
+          and owner_user_id = #{ownerUserId}
+          and del_flag = '0'
+    </update>
+
+    <update id="updateCalculatedProgress" parameterType="TaskItem">
+        update task_item
+        set progress = #{progress},
+            status = #{status},
+            completed_time = #{completedTime},
+            update_by = #{updateBy},
+            update_time = sysdate()
+        where task_id = #{taskId}
+          and owner_user_id = #{ownerUserId}
+          and del_flag = '0'
+    </update>
+
+    <update id="deleteTasks">
+        update task_item
+        set del_flag = '2',
+            update_by = #{updateBy},
+            update_time = sysdate()
+        where owner_user_id = #{ownerUserId}
+          and del_flag = '0'
+          and (
+              task_id in
+              <foreach collection="taskIds" item="taskId" open="(" separator="," close=")">
+                  #{taskId}
+              </foreach>
+              or parent_id in
+              <foreach collection="taskIds" item="taskId" open="(" separator="," close=")">
+                  #{taskId}
+              </foreach>
+          )
+    </update>
+
+    <select id="selectStatistics" resultType="TaskStatistics">
+        select count(1) as total,
+               coalesce(sum(case when status = '1' then 1 else 0 end), 0) as inProgress,
+               coalesce(sum(case
+                   when due_date between curdate() and date_add(curdate(), interval #{upcomingDays} day)
+                        and status not in ('2', '3') then 1 else 0 end), 0) as upcoming,
+               coalesce(sum(case
+                   when due_date &lt; curdate() and status not in ('2', '3') then 1 else 0 end), 0) as overdue,
+               coalesce(sum(case when status = '2' then 1 else 0 end), 0) as completed
+        from task_item
+        where owner_user_id = #{ownerUserId}
+          and parent_id = 0
+          and del_flag = '0'
+    </select>
+</mapper>

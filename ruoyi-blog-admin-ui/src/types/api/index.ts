@@ -21,7 +21,14 @@ export * from "./cms/article";
 export * from "./cms/category";
 export * from "./cms/tag";
 export * from "./cms/link";
+export * from "./cms/lab";
 export * from "./cms/site";
+
+// Task 模块
+export * from "./task/item";
+
+// Stock 模块
+export * from "./stock/review";
 
 // monitor 模块
 export * from "./monitor/cache";

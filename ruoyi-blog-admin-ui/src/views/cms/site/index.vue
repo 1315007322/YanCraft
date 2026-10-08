@@ -129,7 +129,12 @@
           </template>
           <div style="width:100%">
             <el-button type="primary" plain size="small" @click="fillResumeTemplate">填入简历模板</el-button>
-            <el-input v-model="form.aboutContent" type="textarea" :rows="16" class="mt8" placeholder="Markdown" />
+            <markdown-editor
+              v-model="form.aboutContent"
+              class="mt8"
+              :min-height="320"
+              placeholder="关于我页面的 Markdown 正文"
+            />
           </div>
         </el-form-item>
       </el-card>
@@ -156,6 +161,12 @@
             <HintLabel text="友链菜单" hint="控制左侧导航里的「友链」折叠菜单。子级来自友链管理，不是这里的第三方链接。" />
           </template>
           <el-switch v-model="form.friendLinkEnabled" active-value="0" inactive-value="1" />
+        </el-form-item>
+        <el-form-item prop="labEnabled">
+          <template #label>
+            <HintLabel text="实验室菜单" hint="控制前台左侧导航里的「实验室」入口。页面展示实验室管理中已启用的项目卡片。" />
+          </template>
+          <el-switch v-model="form.labEnabled" active-value="0" inactive-value="1" />
         </el-form-item>
         <el-form-item>
           <template #label>

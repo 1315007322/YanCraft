@@ -17,6 +17,7 @@ export interface CmsSiteSetting {
   searchEnabled?: string
   categoryEnabled?: string
   friendLinkEnabled?: string
+  labEnabled?: string
   hotLimit?: number
   homePageSize?: number
   extraNavLinks?: CmsNavLink[]

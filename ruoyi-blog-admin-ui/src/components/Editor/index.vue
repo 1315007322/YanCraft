@@ -31,6 +31,7 @@ import axios from 'axios'
 import { QuillEditor } from "@vueup/vue-quill"
 import "@vueup/vue-quill/dist/vue-quill.snow.css"
 import { getToken } from "@/utils/auth"
+import { isExternal } from "@/utils/validate"
 import type { UploadFileResult } from '@/types/api/common'
 
 const { proxy } = getCurrentInstance()
@@ -158,8 +159,10 @@ function handleUploadSuccess(res: UploadFileResult, file: File) {
     let quill = toRaw(quillEditorRef.value).getQuill()
     // 获取光标位置
     let length = quill.selection.savedRange.index
-    // 插入图片，res.url为服务器返回的图片链接地址
-    quill.insertEmbed(length, "image", import.meta.env.VITE_APP_BASE_API + res.fileName)
+    const imageSrc = isExternal(res.url)
+      ? res.url
+      : (isExternal(res.fileName) ? res.fileName : import.meta.env.VITE_APP_BASE_API + res.fileName)
+    quill.insertEmbed(length, "image", imageSrc)
     // 调整光标到最后
     quill.setSelection(length + 1)
   } else {

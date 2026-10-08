@@ -39,6 +39,8 @@ nbdist/
 ######################################################################
 # Deploy secrets (local one-click publish)
 docker/deploy.env
+ruoyi-admin/src/main/resources/application-oss.yml
+ruoyi-blog-web/.output-docker
 
 ######################################################################
 # Others

@@ -64,6 +64,8 @@ public class CmsSiteSetting
 
     private String friendLinkEnabled;
 
+    private String labEnabled;
+
     @Min(1)
     @Max(50)
     private Integer hotLimit;
@@ -252,6 +254,16 @@ public class CmsSiteSetting
     public void setFriendLinkEnabled(String friendLinkEnabled)
     {
         this.friendLinkEnabled = friendLinkEnabled;
+    }
+
+    public String getLabEnabled()
+    {
+        return labEnabled;
+    }
+
+    public void setLabEnabled(String labEnabled)
+    {
+        this.labEnabled = labEnabled;
     }
 
     public Integer getHotLimit()

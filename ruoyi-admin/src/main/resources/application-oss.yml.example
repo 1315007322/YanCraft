@@ -1,0 +1,12 @@
+# Copy to application-oss.yml (gitignored) and fill keys.
+cdn:
+  oss:
+    active: true
+    bucket: yhfoinone
+    uploadUrl: oss-cn-beijing.aliyuncs.com
+    downloadUrl: oss-cn-beijing.aliyuncs.com
+    accessKeyId: your-access-key-id
+    accessKeySecret: your-access-key-secret
+    mainDir: upload/
+    validTime: 3600000
+    timeout: 600000
