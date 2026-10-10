@@ -16,6 +16,10 @@ public interface StockReviewMapper
 {
     List<StockReview> selectReviewList(StockReview query);
 
+    List<StockReview> selectPublicReviewList();
+
+    StockReview selectPublicReviewById(@Param("reviewId") Long reviewId);
+
     StockReview selectReviewById(@Param("reviewId") Long reviewId, @Param("ownerUserId") Long ownerUserId);
 
     StockReview selectReviewByDate(@Param("reviewDate") Date reviewDate, @Param("ownerUserId") Long ownerUserId);

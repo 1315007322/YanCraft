@@ -8,10 +8,10 @@
     <p v-else-if="!articles.length" class="panel empty">还没有已发布的文章。</p>
     <ArticleCard v-for="item in articles" :key="item.articleId" :article="item">
       <template #meta>
-        <span>{{ item.author || site.author }}</span>
+        <span class="meta-optional">{{ item.author || site.author }}</span>
         <span>{{ formatDate(item.publishTime) }}</span>
         <span v-if="item.categoryName">{{ item.categoryName }}</span>
-        <span>{{ item.readingTime || 0 }} min</span>
+        <span class="meta-quiet">{{ item.readingTime || 0 }} min</span>
       </template>
     </ArticleCard>
     <div v-if="total > pageSize" class="panel pager">

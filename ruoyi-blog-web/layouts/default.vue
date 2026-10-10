@@ -1,19 +1,19 @@
 <template>
   <div class="page" :class="{ 'is-nav-open': navOpen }">
+    <input id="site-nav-switch" v-model="navOpen" class="nav-switch" type="checkbox" />
     <header class="topbar">
       <div class="topbar-inner">
         <div class="brand-row">
-          <button
+          <label
             class="menu-toggle"
-            type="button"
+            for="site-nav-switch"
             :aria-expanded="navOpen"
             aria-controls="site-sidenav"
             :aria-label="navOpen ? '收起菜单' : '打开菜单'"
-            @click="toggleNav"
           >
-            <X v-if="navOpen" :size="22" :stroke-width="2" />
-            <Menu v-else :size="22" :stroke-width="2" />
-          </button>
+            <span class="icon-close"><X :size="22" :stroke-width="2" /></span>
+            <span class="icon-open"><Menu :size="22" :stroke-width="2" /></span>
+          </label>
           <NuxtLink to="/" class="logo" @click="closeNav">{{ site.logoPrefix }}<b>{{ site.logoHighlight }}</b></NuxtLink>
         </div>
         <form v-if="isEnabled(site.searchEnabled)" class="search-box" @submit.prevent="onSearch">
@@ -21,8 +21,9 @@
           <button type="submit">搜索</button>
         </form>
       </div>
+      <RouteProgress />
     </header>
-    <div class="nav-mask" :class="{ show: navOpen }" @click="closeNav" />
+    <label class="nav-mask" :class="{ show: navOpen }" for="site-nav-switch" aria-hidden="true" />
     <div class="shell">
       <aside id="site-sidenav" class="panel sidenav">
         <div class="profile">
@@ -53,6 +54,12 @@
               <NuxtLink to="/lab" exact-active-class="active" active-class="is-partial">
                 <FlaskConical :size="20" :stroke-width="2" />
                 <span>实验室</span>
+              </NuxtLink>
+            </li>
+            <li v-if="isEnabled(site.stockReviewEnabled)">
+              <NuxtLink to="/review" active-class="active">
+                <LineChart :size="20" :stroke-width="2" />
+                <span>股票复盘</span>
               </NuxtLink>
             </li>
             <li v-for="item in extraNavs" :key="item.name + (item.url || '')">
@@ -132,16 +139,24 @@
         </div>
         <div class="rail-block">
           <h3>标签云</h3>
-          <div class="cloud">
-            <template v-for="t in tags" :key="t.tagId">
-              <NuxtLink v-if="t.slug" :to="'/tag/' + t.slug">{{ t.name }}</NuxtLink>
-            </template>
+          <div v-if="rankedTags.length" class="tag-heat">
+            <NuxtLink
+              v-for="t in rankedTags"
+              :key="t.tagId"
+              :to="'/tag/' + t.slug"
+              :class="{ hot: heatOf(t) >= 0.62 }"
+              :style="{ '--heat': String(heatOf(t)) }"
+            >
+              <span>{{ t.name }}</span>
+              <i>{{ t.articleCount || 0 }}</i>
+            </NuxtLink>
           </div>
+          <p v-else class="hot-empty">暂无</p>
         </div>
       </aside>
     </div>
     <footer class="site-footer">
-      <div>{{ site.footerText || site.siteName }}</div>
+      <span>{{ site.footerText || site.siteName }}</span>
       <a
         v-if="site.beianText"
         class="beian"
@@ -154,7 +169,8 @@
 </template>
 
 <script setup lang="ts">
-import { ChevronDown, ExternalLink, FlaskConical, Folder, House, Link as LinkIcon, Menu, User, X } from "lucide-vue-next"
+import { ChevronDown, ExternalLink, FlaskConical, Folder, House, LineChart, Link as LinkIcon, Menu, User, X } from "lucide-vue-next"
+import RouteProgress from "~/components/RouteProgress.vue"
 import { normalizeThemeId } from "~/utils/themes"
 
 const route = useRoute()
@@ -187,6 +203,16 @@ const { data } = await useAsyncData(
 const total = computed(() => data.value?.list.total || 0)
 const categories = computed(() => data.value?.cats.data || [])
 const tags = computed(() => data.value?.tagRes.data || [])
+const rankedTags = computed(() =>
+  [...tags.value]
+    .filter((item) => item.slug)
+    .sort((a, b) => (b.articleCount || 0) - (a.articleCount || 0) || (a.tagId || 0) - (b.tagId || 0))
+)
+
+const tagHeatMax = computed(() => Math.max(1, ...rankedTags.value.map((item) => item.articleCount || 0)))
+function heatOf(item: { articleCount?: number }) {
+  return (item.articleCount || 0) / tagHeatMax.value
+}
 const hot = computed(() => data.value?.hotRes.data || [])
 const friendLinks = computed(() => data.value?.linkRes.data || [])
 const extraNavs = computed(() =>
@@ -202,10 +228,6 @@ function isMobileNav() {
   return import.meta.client && window.matchMedia(mediaQuery).matches
 }
 
-function toggleNav() {
-  navOpen.value = !navOpen.value
-}
-
 function closeNav() {
   navOpen.value = false
 }
@@ -219,7 +241,9 @@ function onNavClick(event: Event) {
 
 function syncBodyScroll() {
   if (!import.meta.client) return
-  document.body.style.overflow = navOpen.value && isMobileNav() ? "hidden" : ""
+  const lock = navOpen.value && isMobileNav()
+  document.documentElement.classList.toggle("nav-open", lock)
+  document.body.style.overflow = lock ? "hidden" : ""
 }
 
 watch(() => route.fullPath, closeNav)
@@ -242,7 +266,10 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener("keydown", onKeydown)
   window.removeEventListener("resize", onResize)
-  if (import.meta.client) document.body.style.overflow = ""
+  if (import.meta.client) {
+    document.documentElement.classList.remove("nav-open")
+    document.body.style.overflow = ""
+  }
 })
 
 const isCategorySection = computed(() => route.path.startsWith("/category/"))

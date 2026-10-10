@@ -8,7 +8,7 @@ package com.ruoyi.blog.constant;
 public class CmsConstants
 {
     /** feature version */
-    public static final String MODULE_VERSION = "1.8.2";
+    public static final String MODULE_VERSION = "1.10.0";
 
     public static final String DEL_NORMAL = "0";
 

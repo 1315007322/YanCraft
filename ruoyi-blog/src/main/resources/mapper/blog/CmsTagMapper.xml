@@ -8,6 +8,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <id     property="tagId"       column="tag_id" />
         <result property="name"        column="name" />
         <result property="slug"        column="slug" />
+        <result property="articleCount" column="article_count" />
         <result property="delFlag"     column="del_flag" />
         <result property="createBy"    column="create_by" />
         <result property="createTime"  column="create_time" />
@@ -27,13 +28,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectTagList" parameterType="CmsTag" resultMap="CmsTagResult">
-        <include refid="selectVo"/>
+        select t.tag_id, t.name, t.slug, t.del_flag, t.create_by, t.create_time, t.update_by, t.update_time, t.remark,
+               (select count(1)
+                  from cms_article_tag at
+                  inner join cms_article a on a.article_id = at.article_id
+                 where at.tag_id = t.tag_id
+                   and a.del_flag = '0'
+                   and a.status = '1') as article_count
+        from cms_tag t
         <where>
-            del_flag = '0'
-            <if test="name != null and name != ''">and name like concat('%', #{name}, '%')</if>
-            <if test="slug != null and slug != ''">and slug = #{slug}</if>
+            t.del_flag = '0'
+            <if test="name != null and name != ''">and t.name like concat('%', #{name}, '%')</if>
+            <if test="slug != null and slug != ''">and t.slug = #{slug}</if>
         </where>
-        order by tag_id desc
+        order by article_count desc, t.tag_id desc
     </select>
 
     <select id="selectTagsByArticleId" parameterType="Long" resultMap="CmsTagResult">

@@ -9,7 +9,7 @@
     <ArticleCard v-for="item in articles" :key="item.articleId" :article="item">
       <template #meta>
         <span>{{ formatDate(item.publishTime) }}</span>
-        <span>{{ item.readingTime || 0 }} min</span>
+        <span class="meta-quiet">{{ item.readingTime || 0 }} min</span>
       </template>
     </ArticleCard>
   </div>

@@ -15,6 +15,7 @@ export interface CmsTag {
   tagId?: number
   name?: string
   slug?: string
+  articleCount?: number
 }
 
 export interface CmsCategory {
@@ -90,10 +91,41 @@ export interface CmsSiteSetting {
   categoryEnabled?: string
   friendLinkEnabled?: string
   labEnabled?: string
+  stockReviewEnabled?: string
+  stockReviewCoverCalm?: string
+  stockReviewCoverOptimistic?: string
+  stockReviewCoverCautious?: string
+  stockReviewCoverChase?: string
+  stockReviewCoverPanic?: string
   hotLimit?: number
   homePageSize?: number
   extraNavLinks?: CmsNavLink[]
   themeId?: string
+}
+
+export interface StockReviewTrade {
+  tradeId?: number
+  stockCode?: string
+  stockName?: string
+  direction?: string
+  quantity?: number
+  price?: number
+  profitLoss?: number
+  resultTag?: string
+  note?: string
+}
+
+export interface StockReview {
+  reviewId?: number
+  reviewDate?: string
+  mood?: string
+  score?: number
+  conclusion?: string
+  mistake?: string
+  nextPlan?: string
+  tradeCount?: number
+  profitLoss?: number | null
+  trades?: StockReviewTrade[]
 }
 
 export interface CmsNavLink {

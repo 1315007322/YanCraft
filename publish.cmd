@@ -8,35 +8,36 @@ if /I "%~1"=="skip-build" set "SKIP_BUILD=1"
 if /I "%~1"=="--skip-build" set "SKIP_BUILD=1"
 
 if not exist "docker\deploy.env" (
-  echo [ERROR] 缺少 docker\deploy.env
-  echo 请复制 docker\deploy.env.example 为 docker\deploy.env 并填写 SSH / MySQL 密码。
+  echo [ERROR] ??? docker\deploy.env
+  echo ???? docker\deploy.env.example ? docker\deploy.env ????д SSH / MySQL ????
   goto :fail
 )
 
-where java >nul 2>&1 || (echo [ERROR] 未找到 java & goto :fail)
-where mvn >nul 2>&1 || (echo [ERROR] 未找到 mvn & goto :fail)
-where npm >nul 2>&1 || (echo [ERROR] 未找到 npm & goto :fail)
-where docker >nul 2>&1 || (echo [ERROR] 未找到 docker，请先启动 Docker Desktop & goto :fail)
-where python >nul 2>&1 || (echo [ERROR] 未找到 python & goto :fail)
+where java >nul 2>&1 || (echo [ERROR] δ??? java & goto :fail)
+where mvn >nul 2>&1 || (echo [ERROR] δ??? mvn & goto :fail)
+where npm >nul 2>&1 || (echo [ERROR] δ??? npm & goto :fail)
+where docker >nul 2>&1 || (echo [ERROR] δ??? docker?????????? Docker Desktop & goto :fail)
+where python >nul 2>&1 || (echo [ERROR] δ??? python & goto :fail)
 
 python -c "import paramiko" 2>nul || (
-  echo [INFO] 安装 paramiko ...
+  echo [INFO] ??? paramiko ...
   python -m pip install paramiko -q
 )
 
 if "%SKIP_BUILD%"=="1" goto :image
 
 echo.
-echo ========== 1/4 打包 Java JAR ==========
+echo ========== 1/4 ??? Java JAR ==========
+if exist "ruoyi-admin\target\ruoyi-admin.jar" del /f /q "ruoyi-admin\target\ruoyi-admin.jar"
 call mvn -pl ruoyi-admin -am package -DskipTests
 if errorlevel 1 goto :fail
 if not exist "ruoyi-admin\target\ruoyi-admin.jar" (
-  echo [ERROR] 未生成 ruoyi-admin\target\ruoyi-admin.jar
+  echo [ERROR] δ???? ruoyi-admin\target\ruoyi-admin.jar
   goto :fail
 )
 
 echo.
-echo ========== 2/4 打包管理后台 dist ==========
+echo ========== 2/4 ?????????? dist ==========
 pushd ruoyi-blog-admin-ui
 if not exist node_modules call npm install
 if errorlevel 1 (popd & goto :fail)
@@ -44,12 +45,12 @@ call npm run build:prod
 if errorlevel 1 (popd & goto :fail)
 popd
 if not exist "ruoyi-blog-admin-ui\dist\index.html" (
-  echo [ERROR] 未生成 ruoyi-blog-admin-ui\dist
+  echo [ERROR] δ???? ruoyi-blog-admin-ui\dist
   goto :fail
 )
 
 echo.
-echo ========== 3/4 打包博客 .output ==========
+echo ========== 3/4 ??????? .output ==========
 pushd ruoyi-blog-web
 if not exist node_modules call npm install
 if errorlevel 1 (popd & goto :fail)
@@ -59,28 +60,30 @@ call npm run build
 if errorlevel 1 (popd & goto :fail)
 popd
 if not exist "ruoyi-blog-web\.output\server\index.mjs" (
-  echo [ERROR] 未生成 ruoyi-blog-web\.output
+  echo [ERROR] δ???? ruoyi-blog-web\.output
   goto :fail
 )
 
 :image
 echo.
-echo ========== 4/4 构建镜像并发布到服务器 ==========
+echo ========== 4/4 ??????????????????? ==========
 python docker\materialize_blog_output.py
 if errorlevel 1 goto :fail
-docker compose build app
+python docker\ensure_docker_engine.py
+if errorlevel 1 goto :fail
+docker compose --env-file docker\deploy.env build app
 if errorlevel 1 goto :fail
 
 python docker\publish_upload.py
 if errorlevel 1 goto :fail
 
 echo.
-echo 发布完成。后台 3001，前台 3000。不会启动 Redis / MySQL 容器。
+echo ??????ɡ???? 3001???? 3000?????????? Redis / MySQL ??????
 goto :end
 
 :fail
 echo.
-echo 发布失败。
+echo ????????
 if /I not "%~1"=="nopause" pause
 exit /b 1
 

@@ -32,6 +32,20 @@ md.renderer.rules.table_close = (tokens, idx, options, env, self) => {
   return `${renderTableClose(tokens, idx, options, env, self)}</div>`
 }
 
+function normalizeHeading(value: string) {
+  return value.replace(/[\s｜|·、，,。:：]/g, "").toLowerCase()
+}
+
+export function stripLeadingTitle(source: string, title?: string) {
+  if (!source || !title) {
+    return source || ""
+  }
+  const want = normalizeHeading(title)
+  return source.replace(/^\s*#\s+([^\n]+)\n+/, (all, heading: string) => {
+    return normalizeHeading(heading) === want ? "" : all
+  })
+}
+
 export function renderMarkdown(source?: string) {
   return md.render(source || "")
 }

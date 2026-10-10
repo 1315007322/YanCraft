@@ -20,6 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime" column="update_time" />
         <result property="remark" column="remark" />
         <result property="tradeCount" column="trade_count" />
+        <result property="profitLoss" column="profit_loss" />
     </resultMap>
 
     <resultMap type="StockReviewTrade" id="StockReviewTradeResult">
@@ -49,7 +50,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                r.conclusion, r.mistake, r.next_plan, r.del_flag,
                r.create_by, r.create_time, r.update_by, r.update_time, r.remark,
                (select count(1) from stock_review_trade t
-                 where t.review_id = r.review_id and t.owner_user_id = r.owner_user_id and t.del_flag = '0') as trade_count
+                 where t.review_id = r.review_id and t.owner_user_id = r.owner_user_id and t.del_flag = '0') as trade_count,
+               (select sum(t.profit_loss) from stock_review_trade t
+                 where t.review_id = r.review_id and t.owner_user_id = r.owner_user_id and t.del_flag = '0') as profit_loss
         from stock_review r
     </sql>
 
@@ -92,6 +95,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </if>
         </where>
         order by r.review_date desc, r.review_id desc
+    </select>
+
+    <select id="selectPublicReviewList" resultMap="StockReviewResult">
+        <include refid="selectReviewVo"/>
+        where r.del_flag = '0'
+        order by r.review_date desc, r.review_id desc
+    </select>
+
+    <select id="selectPublicReviewById" resultMap="StockReviewResult">
+        <include refid="selectReviewVo"/>
+        where r.review_id = #{reviewId}
+          and r.del_flag = '0'
     </select>
 
     <select id="selectReviewById" resultMap="StockReviewResult">

@@ -30,6 +30,8 @@ const key = computed(() => String(route.params.slug || ''))
 const { data } = await useAsyncData(() => `post-${key.value}`, () => fetchArticleByKey(key.value), { watch: [key] })
 const article = computed(() => (data.value?.code === 200 ? data.value.data : undefined))
 const heroCover = computed(() => article.value?.coverWide)
-const html = computed(() => renderMarkdown(article.value?.content))
+const html = computed(() =>
+  renderMarkdown(stripLeadingTitle(article.value?.content || "", article.value?.title))
+)
 useHead({ title: () => article.value?.title || site.value.siteName || 'SuperYan' })
 </script>

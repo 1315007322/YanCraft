@@ -44,6 +44,12 @@ public class CmsSiteConfigServiceImpl implements ICmsSiteConfigService
     private static final String KEY_CATEGORY_ENABLED = "categoryEnabled";
     private static final String KEY_FRIEND_LINK_ENABLED = "friendLinkEnabled";
     private static final String KEY_LAB_ENABLED = "labEnabled";
+    private static final String KEY_STOCK_REVIEW_ENABLED = "stockReviewEnabled";
+    private static final String KEY_STOCK_REVIEW_COVER_CALM = "stockReviewCoverCalm";
+    private static final String KEY_STOCK_REVIEW_COVER_OPTIMISTIC = "stockReviewCoverOptimistic";
+    private static final String KEY_STOCK_REVIEW_COVER_CAUTIOUS = "stockReviewCoverCautious";
+    private static final String KEY_STOCK_REVIEW_COVER_CHASE = "stockReviewCoverChase";
+    private static final String KEY_STOCK_REVIEW_COVER_PANIC = "stockReviewCoverPanic";
     private static final String KEY_HOT_LIMIT = "hotLimit";
     private static final String KEY_HOME_PAGE_SIZE = "homePageSize";
     private static final String KEY_EXTRA_NAV_LINKS = "extraNavLinks";
@@ -81,6 +87,12 @@ public class CmsSiteConfigServiceImpl implements ICmsSiteConfigService
         setting.setCategoryEnabled(flag(map, KEY_CATEGORY_ENABLED));
         setting.setFriendLinkEnabled(flag(map, KEY_FRIEND_LINK_ENABLED));
         setting.setLabEnabled(flag(map, KEY_LAB_ENABLED));
+        setting.setStockReviewEnabled(flag(map, KEY_STOCK_REVIEW_ENABLED));
+        setting.setStockReviewCoverCalm(str(map, KEY_STOCK_REVIEW_COVER_CALM, ""));
+        setting.setStockReviewCoverOptimistic(str(map, KEY_STOCK_REVIEW_COVER_OPTIMISTIC, ""));
+        setting.setStockReviewCoverCautious(str(map, KEY_STOCK_REVIEW_COVER_CAUTIOUS, ""));
+        setting.setStockReviewCoverChase(str(map, KEY_STOCK_REVIEW_COVER_CHASE, ""));
+        setting.setStockReviewCoverPanic(str(map, KEY_STOCK_REVIEW_COVER_PANIC, ""));
         setting.setHotLimit(num(map, KEY_HOT_LIMIT, 6));
         setting.setHomePageSize(num(map, KEY_HOME_PAGE_SIZE, 8));
         setting.setExtraNavLinks(parseNavLinks(map.get(KEY_EXTRA_NAV_LINKS)));
@@ -114,6 +126,12 @@ public class CmsSiteConfigServiceImpl implements ICmsSiteConfigService
         rows += upsert(KEY_CATEGORY_ENABLED, enabled(setting.getCategoryEnabled()));
         rows += upsert(KEY_FRIEND_LINK_ENABLED, enabled(setting.getFriendLinkEnabled()));
         rows += upsert(KEY_LAB_ENABLED, enabled(setting.getLabEnabled()));
+        rows += upsert(KEY_STOCK_REVIEW_ENABLED, enabled(setting.getStockReviewEnabled()));
+        rows += upsert(KEY_STOCK_REVIEW_COVER_CALM, setting.getStockReviewCoverCalm());
+        rows += upsert(KEY_STOCK_REVIEW_COVER_OPTIMISTIC, setting.getStockReviewCoverOptimistic());
+        rows += upsert(KEY_STOCK_REVIEW_COVER_CAUTIOUS, setting.getStockReviewCoverCautious());
+        rows += upsert(KEY_STOCK_REVIEW_COVER_CHASE, setting.getStockReviewCoverChase());
+        rows += upsert(KEY_STOCK_REVIEW_COVER_PANIC, setting.getStockReviewCoverPanic());
         rows += upsert(KEY_HOT_LIMIT, setting.getHotLimit() == null ? "6" : String.valueOf(setting.getHotLimit()));
         rows += upsert(KEY_HOME_PAGE_SIZE, setting.getHomePageSize() == null ? "8" : String.valueOf(setting.getHomePageSize()));
         rows += upsert(KEY_EXTRA_NAV_LINKS, JSON.toJSONString(normalizeNavLinks(setting.getExtraNavLinks())));

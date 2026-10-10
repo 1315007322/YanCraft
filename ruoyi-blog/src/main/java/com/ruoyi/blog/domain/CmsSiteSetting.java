@@ -66,6 +66,24 @@ public class CmsSiteSetting
 
     private String labEnabled;
 
+    /** 0 show stock review menu, 1 hide */
+    private String stockReviewEnabled;
+
+    @Size(max = 500)
+    private String stockReviewCoverCalm;
+
+    @Size(max = 500)
+    private String stockReviewCoverOptimistic;
+
+    @Size(max = 500)
+    private String stockReviewCoverCautious;
+
+    @Size(max = 500)
+    private String stockReviewCoverChase;
+
+    @Size(max = 500)
+    private String stockReviewCoverPanic;
+
     @Min(1)
     @Max(50)
     private Integer hotLimit;
@@ -267,6 +285,66 @@ public class CmsSiteSetting
     public void setLabEnabled(String labEnabled)
     {
         this.labEnabled = labEnabled;
+    }
+
+    public String getStockReviewEnabled()
+    {
+        return stockReviewEnabled;
+    }
+
+    public void setStockReviewEnabled(String stockReviewEnabled)
+    {
+        this.stockReviewEnabled = stockReviewEnabled;
+    }
+
+    public String getStockReviewCoverCalm()
+    {
+        return stockReviewCoverCalm;
+    }
+
+    public void setStockReviewCoverCalm(String stockReviewCoverCalm)
+    {
+        this.stockReviewCoverCalm = stockReviewCoverCalm;
+    }
+
+    public String getStockReviewCoverOptimistic()
+    {
+        return stockReviewCoverOptimistic;
+    }
+
+    public void setStockReviewCoverOptimistic(String stockReviewCoverOptimistic)
+    {
+        this.stockReviewCoverOptimistic = stockReviewCoverOptimistic;
+    }
+
+    public String getStockReviewCoverCautious()
+    {
+        return stockReviewCoverCautious;
+    }
+
+    public void setStockReviewCoverCautious(String stockReviewCoverCautious)
+    {
+        this.stockReviewCoverCautious = stockReviewCoverCautious;
+    }
+
+    public String getStockReviewCoverChase()
+    {
+        return stockReviewCoverChase;
+    }
+
+    public void setStockReviewCoverChase(String stockReviewCoverChase)
+    {
+        this.stockReviewCoverChase = stockReviewCoverChase;
+    }
+
+    public String getStockReviewCoverPanic()
+    {
+        return stockReviewCoverPanic;
+    }
+
+    public void setStockReviewCoverPanic(String stockReviewCoverPanic)
+    {
+        this.stockReviewCoverPanic = stockReviewCoverPanic;
     }
 
     public Integer getHotLimit()

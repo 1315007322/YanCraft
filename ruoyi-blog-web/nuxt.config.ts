@@ -24,6 +24,24 @@ export default defineNuxtConfig({
       apiBase: ""
     }
   },
+  vite: {
+    plugins: [
+      {
+        name: "resolve-app-manifest",
+        enforce: "post",
+        resolveId(id) {
+          if (id === "#app-manifest") {
+            return "\0virtual:app-manifest"
+          }
+        },
+        load(id) {
+          if (id === "\0virtual:app-manifest") {
+            return "export default { id: '', timestamp: 0, matcher: () => false, prerendered: [] }"
+          }
+        }
+      }
+    ]
+  },
   nitro: {
     routeRules: {
       "/portal/**": { proxy: `${backend}/portal/**` },

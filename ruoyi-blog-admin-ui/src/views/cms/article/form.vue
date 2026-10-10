@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-container article-form">
     <el-form ref="articleRef" :model="form" :rules="rules" label-width="100px">
       <el-row>
         <el-col :span="16">
@@ -400,8 +400,26 @@ watch(() => route.params.articleId, () => {
 </script>
 
 <style scoped>
+.article-form {
+  padding-bottom: 76px;
+}
 .footer-btns {
-  padding: 12px 0 24px 100px;
+  position: fixed;
+  z-index: 9;
+  left: 200px;
+  right: 0;
+  bottom: 0;
+  padding: 12px 24px 12px 124px;
+  background: var(--el-bg-color, #fff);
+  border-top: 1px solid var(--el-border-color-lighter, #ebeef5);
+  box-shadow: 0 -6px 16px rgba(0, 0, 0, 0.05);
+}
+:global(.hideSidebar) .footer-btns {
+  left: 54px;
+}
+:global(.mobile) .footer-btns,
+:global(.sidebarHide) .footer-btns {
+  left: 0;
 }
 .cover-pair {
   display: flex;

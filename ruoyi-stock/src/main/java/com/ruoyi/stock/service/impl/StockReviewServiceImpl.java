@@ -55,6 +55,56 @@ public class StockReviewServiceImpl implements IStockReviewService
     }
 
     @Override
+    public List<StockReview> selectPublicReviewList()
+    {
+        List<StockReview> list = stockReviewMapper.selectPublicReviewList();
+        if (list == null)
+        {
+            return new ArrayList<StockReview>();
+        }
+        for (StockReview review : list)
+        {
+            hideOwner(review);
+        }
+        return list;
+    }
+
+    @Override
+    public StockReview selectPublicReviewById(Long reviewId)
+    {
+        if (reviewId == null)
+        {
+            return null;
+        }
+        StockReview review = stockReviewMapper.selectPublicReviewById(reviewId);
+        if (review == null)
+        {
+            return null;
+        }
+        List<StockReviewTrade> trades = stockReviewMapper.selectTradesByReviewId(reviewId, review.getOwnerUserId());
+        if (trades != null)
+        {
+            for (StockReviewTrade trade : trades)
+            {
+                trade.setOwnerUserId(null);
+                trade.setCreateBy(null);
+                trade.setUpdateBy(null);
+            }
+        }
+        review.setTrades(trades == null ? new ArrayList<StockReviewTrade>() : trades);
+        hideOwner(review);
+        return review;
+    }
+
+    private void hideOwner(StockReview review)
+    {
+        review.setOwnerUserId(null);
+        review.setCreateBy(null);
+        review.setUpdateBy(null);
+        review.setRemark(null);
+    }
+
+    @Override
     public List<StockReviewTrade> selectTradeList(StockReviewTrade query)
     {
         return stockReviewMapper.selectTradeList(query);

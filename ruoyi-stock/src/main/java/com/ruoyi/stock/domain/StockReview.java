@@ -1,5 +1,6 @@
 package com.ruoyi.stock.domain;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -39,6 +40,9 @@ public class StockReview extends BaseEntity
     private String resultTag;
 
     private Integer tradeCount;
+
+    /** Sum of the day's trade profit and loss. Null when none was recorded. */
+    private BigDecimal profitLoss;
 
     @Valid
     private List<StockReviewTrade> trades = new ArrayList<StockReviewTrade>();
@@ -161,6 +165,16 @@ public class StockReview extends BaseEntity
     public void setTradeCount(Integer tradeCount)
     {
         this.tradeCount = tradeCount;
+    }
+
+    public BigDecimal getProfitLoss()
+    {
+        return profitLoss;
+    }
+
+    public void setProfitLoss(BigDecimal profitLoss)
+    {
+        this.profitLoss = profitLoss;
     }
 
     public List<StockReviewTrade> getTrades()

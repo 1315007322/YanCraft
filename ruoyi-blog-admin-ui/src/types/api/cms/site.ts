@@ -18,6 +18,12 @@ export interface CmsSiteSetting {
   categoryEnabled?: string
   friendLinkEnabled?: string
   labEnabled?: string
+  stockReviewEnabled?: string
+  stockReviewCoverCalm?: string
+  stockReviewCoverOptimistic?: string
+  stockReviewCoverCautious?: string
+  stockReviewCoverChase?: string
+  stockReviewCoverPanic?: string
   hotLimit?: number
   homePageSize?: number
   extraNavLinks?: CmsNavLink[]

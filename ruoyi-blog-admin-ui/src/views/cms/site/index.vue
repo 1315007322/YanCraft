@@ -178,6 +178,23 @@
           </template>
           <el-switch v-model="form.labEnabled" active-value="0" inactive-value="1" />
         </el-form-item>
+        <el-form-item prop="stockReviewEnabled">
+          <template #label>
+            <HintLabel text="股票复盘" hint="控制前台左侧导航里的「股票复盘」入口。列表样式与文章一致，详情展示复盘预览中的结论、失误、下次计划和当日交易。" />
+          </template>
+          <el-switch v-model="form.stockReviewEnabled" active-value="0" inactive-value="1" />
+        </el-form-item>
+        <el-form-item>
+          <template #label>
+            <HintLabel text="情绪封面" hint="复盘列表按当天市场情绪使用对应封面。某一档没上传时，该情绪的卡片显示「复」。" />
+          </template>
+          <div class="mood-covers">
+            <div v-for="item in moodCovers" :key="item.key" class="mood-cover">
+              <span>{{ item.label }}</span>
+              <image-upload v-model="form[item.key]" :limit="1" />
+            </div>
+          </div>
+        </el-form-item>
         <el-form-item>
           <template #label>
             <HintLabel text="第三方链接" hint="显示在左侧「关于我」和「分类」之间的固定外链，适合自己的 GitHub、仓库等。启用且填写名称和网址后才会出现。" />
@@ -256,6 +273,14 @@ import resumeTemplate from "./resume.md?raw"
 
 const { proxy } = getCurrentInstance()
 const saving = ref(false)
+const moodCovers = [
+  { key: "stockReviewCoverCalm", label: "冷静" },
+  { key: "stockReviewCoverOptimistic", label: "乐观" },
+  { key: "stockReviewCoverCautious", label: "谨慎" },
+  { key: "stockReviewCoverChase", label: "追涨" },
+  { key: "stockReviewCoverPanic", label: "恐慌" }
+]
+
 
 const data = reactive({
   form: {} as CmsSiteSetting,
@@ -332,6 +357,20 @@ load()
   font-size: 12px;
   font-weight: normal;
   color: #909399;
+}
+.mood-covers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 20px;
+}
+.mood-cover {
+  width: 148px;
+}
+.mood-cover span {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--el-text-color-regular);
+  font-size: 13px;
 }
 .footer-btns {
   position: sticky;

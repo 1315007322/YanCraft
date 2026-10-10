@@ -23,6 +23,9 @@ public class CmsTag extends BaseEntity
     /** 访问标识 */
     private String slug;
 
+    /** 已发布文章数 */
+    private Integer articleCount;
+
     /** 删除标志（0存在 2删除） */
     private String delFlag;
 
@@ -58,6 +61,16 @@ public class CmsTag extends BaseEntity
     public void setSlug(String slug)
     {
         this.slug = slug;
+    }
+
+    public Integer getArticleCount()
+    {
+        return articleCount;
+    }
+
+    public void setArticleCount(Integer articleCount)
+    {
+        this.articleCount = articleCount;
     }
 
     public String getDelFlag()

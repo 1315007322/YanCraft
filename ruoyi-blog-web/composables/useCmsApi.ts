@@ -1,4 +1,4 @@
-import type { AjaxResult, ArticleListQuery, CmsArticle, CmsCategory, CmsFriendLink, CmsLabProject, CmsSiteSetting, CmsTag, TableDataInfo } from "~/types/cms"
+import type { AjaxResult, ArticleListQuery, CmsArticle, CmsCategory, CmsFriendLink, CmsLabProject, CmsSiteSetting, CmsTag, StockReview, TableDataInfo } from "~/types/cms"
 
 function apiPrefix() {
   const config = useRuntimeConfig()
@@ -94,6 +94,24 @@ export async function fetchLabProjects() {
     return await $fetch<AjaxResult<CmsLabProject[]>>(`${apiPrefix()}/portal/cms/lab/list`)
   } catch {
     return { code: 500, msg: "unavailable", data: [] }
+  }
+}
+
+export async function fetchStockReviews(pageNum = 1, pageSize = 8) {
+  try {
+    return await $fetch<TableDataInfo<StockReview>>(`${apiPrefix()}/portal/stock/review/list`, {
+      query: { pageNum, pageSize }
+    })
+  } catch {
+    return { code: 500, msg: "unavailable", total: 0, rows: [] }
+  }
+}
+
+export async function fetchStockReview(reviewId: string) {
+  try {
+    return await $fetch<AjaxResult<StockReview>>(`${apiPrefix()}/portal/stock/review/${encodeURIComponent(reviewId)}`)
+  } catch {
+    return { code: 500, msg: "unavailable" } as AjaxResult<StockReview>
   }
 }
 

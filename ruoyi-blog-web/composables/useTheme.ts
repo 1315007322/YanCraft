@@ -1,7 +1,4 @@
-import { THEME_IDS, THEME_META, normalizeThemeId, type ThemeId } from "~/utils/themes"
-
-export { THEME_IDS, THEME_META, normalizeThemeId }
-export type { ThemeId }
+import { THEME_META, normalizeThemeId, type ThemeId } from "~/utils/themes"
 
 export function useTheme() {
   const theme = useState<ThemeId>("yc-theme", () => "paper")
