@@ -31,6 +31,9 @@ export * from "./task/item";
 // Stock 模块
 export * from "./stock/review";
 
+// Exam 模块
+export * from "./exam/verbal";
+
 // monitor 模块
 export * from "./monitor/cache";
 export * from "./monitor/job";

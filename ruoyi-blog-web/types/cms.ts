@@ -92,6 +92,7 @@ export interface CmsSiteSetting {
   friendLinkEnabled?: string
   labEnabled?: string
   stockReviewEnabled?: string
+  verbalEnabled?: string
   stockReviewCoverCalm?: string
   stockReviewCoverOptimistic?: string
   stockReviewCoverCautious?: string
@@ -134,4 +135,18 @@ export interface CmsNavLink {
   openInNew?: string
   sort?: number
   enabled?: string
+}
+
+export interface ExamVerbalCard {
+  cardId?: number
+  cardType?: string
+  prompt?: string
+  difference?: string
+  collocation?: string
+  confusion?: string
+  ownSentence?: string
+  intervalDays?: number
+  dueDate?: string
+  reviewCount?: number
+  missed?: string
 }

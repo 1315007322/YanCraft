@@ -286,23 +286,34 @@ function removeTrade(index: number) {
 
 function copyPrevious() {
   getPreviousTrades(form.reviewDate || formatDay(selectedDate.value)).then((res) => {
-    const rows = res.data || []
-    if (!rows.length) {
+    const data = res.data
+    const rows = ((data && data.trades) || []).filter((item) => item && item.stockCode)
+    const hasText = !!(data && (data.conclusion || data.mistake || data.nextPlan))
+    if (!data || (!rows.length && !hasText)) {
       proxy.$modal.msgWarning("没有可复制的上一交易日")
       return
     }
-    form.trades = rows.map((item) => ({
-      stockCode: item.stockCode,
-      stockName: item.stockName,
-      direction: item.direction || "0",
-      resultTag: item.resultTag,
-      quantity: undefined,
-      price: undefined,
-      profitLoss: undefined,
-      note: ""
-    }))
-    rememberSymbols(form.trades || [])
-    proxy.$modal.msgSuccess("已带入代码，数量价格请重填")
+    form.conclusion = data.conclusion || ""
+    form.mistake = data.mistake || ""
+    form.nextPlan = data.nextPlan || ""
+    if (rows.length) {
+      form.trades = rows.map((item) => ({
+        stockCode: item.stockCode,
+        stockName: item.stockName,
+        direction: item.direction || "0",
+        resultTag: item.resultTag,
+        quantity: undefined,
+        price: undefined,
+        profitLoss: undefined,
+        note: ""
+      }))
+      rememberSymbols(form.trades || [])
+    }
+    const copiedDay = data.reviewDate ? String(data.reviewDate).slice(0, 10) : ""
+    const tip = rows.length
+      ? "已带入 " + copiedDay + " 的正文和代码，数量价格请重填"
+      : "已带入 " + copiedDay + " 的正文"
+    proxy.$modal.msgSuccess(copiedDay ? tip : "已带入上一交易日")
   })
 }
 

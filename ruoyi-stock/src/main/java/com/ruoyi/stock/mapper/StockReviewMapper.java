@@ -45,7 +45,7 @@ public interface StockReviewMapper
     List<StockReviewTrade> selectTradesByReviewId(@Param("reviewId") Long reviewId,
             @Param("ownerUserId") Long ownerUserId);
 
-    List<StockReviewTrade> selectPreviousTrades(@Param("ownerUserId") Long ownerUserId,
+    StockReview selectPreviousReview(@Param("ownerUserId") Long ownerUserId,
             @Param("beforeDate") Date beforeDate);
 
     List<StockSymbol> selectSymbols(@Param("ownerUserId") Long ownerUserId, @Param("keyword") String keyword,

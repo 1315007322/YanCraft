@@ -36,6 +36,14 @@ public interface CmsArticleMapper
     List<CmsArticle> selectArticleList(CmsArticle article);
 
     /**
+     * 后台文章列表，按修改时间倒序
+     *
+     * @param article 查询条件
+     * @return 文章集合
+     */
+    List<CmsArticle> selectAdminArticleList(CmsArticle article);
+
+    /**
      * 已发布热门列表
      *
      * @param limit 条数

@@ -184,6 +184,12 @@
           </template>
           <el-switch v-model="form.stockReviewEnabled" active-value="0" inactive-value="1" />
         </el-form-item>
+        <el-form-item prop="verbalEnabled">
+          <template #label>
+            <HintLabel text="言语积累" hint="控制前台左侧导航里的「言语积累」入口。卡片在「考公 / 言语积累」里录入，每天 0:05 按间隔生成当天的卡组。" />
+          </template>
+          <el-switch v-model="form.verbalEnabled" active-value="0" inactive-value="1" />
+        </el-form-item>
         <el-form-item>
           <template #label>
             <HintLabel text="情绪封面" hint="复盘列表按当天市场情绪使用对应封面。某一档没上传时，该情绪的卡片显示「复」。" />

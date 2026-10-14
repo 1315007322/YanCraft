@@ -87,8 +87,12 @@
 <script setup lang="ts">
 import { ArrowUpRight, Code2, ExternalLink, FlaskConical } from "lucide-vue-next"
 
+const site = await useSiteConfig()
 const { data, pending } = await useAsyncData("cms-lab-projects", fetchLabProjects)
 const projects = computed(() => data.value?.data || [])
 
-useHead({ title: "实验室" })
+usePageSeo(site, {
+  title: "实验室",
+  description: "正在构建、已经完成，以及值得被打开看一看的项目。"
+})
 </script>

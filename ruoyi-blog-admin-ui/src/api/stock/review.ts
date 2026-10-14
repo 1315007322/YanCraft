@@ -58,7 +58,7 @@ export function listStockTrades(query: StockTradeQueryParams): Promise<TableData
   })
 }
 
-export function getPreviousTrades(before: string): Promise<AjaxResult<StockReviewTrade[]>> {
+export function getPreviousTrades(before: string): Promise<AjaxResult<StockReview>> {
   return request({
     url: "/stock/review/previous-trades",
     method: "get",

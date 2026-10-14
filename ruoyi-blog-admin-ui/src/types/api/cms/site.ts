@@ -19,6 +19,7 @@ export interface CmsSiteSetting {
   friendLinkEnabled?: string
   labEnabled?: string
   stockReviewEnabled?: string
+  verbalEnabled?: string
   stockReviewCoverCalm?: string
   stockReviewCoverOptimistic?: string
   stockReviewCoverCautious?: string

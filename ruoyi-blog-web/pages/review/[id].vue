@@ -74,7 +74,11 @@ const score = computed(() => {
   return Math.max(0, Math.min(5, Math.round(n)))
 })
 
-useHead({ title: () => `${day.value} 复盘 · ${site.value.siteName || "SuperYan"}` })
+usePageSeo(site, {
+  title: () => `${day.value} 复盘`,
+  description: () => review.value?.conclusion,
+  type: "article"
+})
 
 const moods: Record<string, string> = { "0": "冷静", "1": "乐观", "2": "谨慎", "3": "追涨", "4": "恐慌" }
 const directions: Record<string, string> = { "0": "买入", "1": "卖出", "2": "观察" }

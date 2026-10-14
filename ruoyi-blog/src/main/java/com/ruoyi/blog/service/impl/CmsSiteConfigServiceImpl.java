@@ -45,6 +45,7 @@ public class CmsSiteConfigServiceImpl implements ICmsSiteConfigService
     private static final String KEY_FRIEND_LINK_ENABLED = "friendLinkEnabled";
     private static final String KEY_LAB_ENABLED = "labEnabled";
     private static final String KEY_STOCK_REVIEW_ENABLED = "stockReviewEnabled";
+    private static final String KEY_VERBAL_ENABLED = "verbalEnabled";
     private static final String KEY_STOCK_REVIEW_COVER_CALM = "stockReviewCoverCalm";
     private static final String KEY_STOCK_REVIEW_COVER_OPTIMISTIC = "stockReviewCoverOptimistic";
     private static final String KEY_STOCK_REVIEW_COVER_CAUTIOUS = "stockReviewCoverCautious";
@@ -88,6 +89,7 @@ public class CmsSiteConfigServiceImpl implements ICmsSiteConfigService
         setting.setFriendLinkEnabled(flag(map, KEY_FRIEND_LINK_ENABLED));
         setting.setLabEnabled(flag(map, KEY_LAB_ENABLED));
         setting.setStockReviewEnabled(flag(map, KEY_STOCK_REVIEW_ENABLED));
+        setting.setVerbalEnabled(flag(map, KEY_VERBAL_ENABLED));
         setting.setStockReviewCoverCalm(str(map, KEY_STOCK_REVIEW_COVER_CALM, ""));
         setting.setStockReviewCoverOptimistic(str(map, KEY_STOCK_REVIEW_COVER_OPTIMISTIC, ""));
         setting.setStockReviewCoverCautious(str(map, KEY_STOCK_REVIEW_COVER_CAUTIOUS, ""));
@@ -127,6 +129,7 @@ public class CmsSiteConfigServiceImpl implements ICmsSiteConfigService
         rows += upsert(KEY_FRIEND_LINK_ENABLED, enabled(setting.getFriendLinkEnabled()));
         rows += upsert(KEY_LAB_ENABLED, enabled(setting.getLabEnabled()));
         rows += upsert(KEY_STOCK_REVIEW_ENABLED, enabled(setting.getStockReviewEnabled()));
+        rows += upsert(KEY_VERBAL_ENABLED, enabled(setting.getVerbalEnabled()));
         rows += upsert(KEY_STOCK_REVIEW_COVER_CALM, setting.getStockReviewCoverCalm());
         rows += upsert(KEY_STOCK_REVIEW_COVER_OPTIMISTIC, setting.getStockReviewCoverOptimistic());
         rows += upsert(KEY_STOCK_REVIEW_COVER_CAUTIOUS, setting.getStockReviewCoverCautious());

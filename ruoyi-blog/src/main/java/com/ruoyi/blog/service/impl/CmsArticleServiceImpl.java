@@ -69,7 +69,7 @@ public class CmsArticleServiceImpl implements ICmsArticleService
     @Override
     public List<CmsArticle> selectArticleList(CmsArticle article)
     {
-        return articleMapper.selectArticleList(article);
+        return articleMapper.selectAdminArticleList(article);
     }
 
     /**

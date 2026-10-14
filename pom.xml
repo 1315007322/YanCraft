@@ -219,6 +219,13 @@
                 <version>${ruoyi.version}</version>
             </dependency>
 
+            <!-- 考公记忆模块 -->
+            <dependency>
+                <groupId>com.ruoyi</groupId>
+                <artifactId>ruoyi-exam</artifactId>
+                <version>${ruoyi.version}</version>
+            </dependency>
+
             <!-- 核心模块-->
             <dependency>
                 <groupId>com.ruoyi</groupId>
@@ -253,6 +260,7 @@
         <module>ruoyi-blog</module>
         <module>ruoyi-task</module>
         <module>ruoyi-stock</module>
+        <module>ruoyi-exam</module>
     </modules>
     <packaging>pom</packaging>
 

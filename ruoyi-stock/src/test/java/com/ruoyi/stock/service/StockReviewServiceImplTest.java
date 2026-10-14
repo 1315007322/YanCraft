@@ -136,23 +136,36 @@ public class StockReviewServiceImplTest
     @Test
     public void shouldCopyPreviousTradesWithoutNumbers()
     {
-        StockReviewTrade source = new StockReviewTrade();
-        source.setStockCode("000001");
-        source.setStockName("Ping An");
-        source.setDirection("1");
-        source.setResultTag("0");
-        source.setQuantity(new BigDecimal("200"));
-        source.setPrice(new BigDecimal("10.5"));
-        source.setProfitLoss(new BigDecimal("30"));
-        when(stockReviewMapper.selectPreviousTrades(eq(1L), any(Date.class))).thenReturn(Collections.singletonList(source));
+        StockReview source = new StockReview();
+        source.setReviewId(9L);
+        source.setReviewDate(day);
+        source.setConclusion("held the plan");
+        source.setMistake("chased the open");
+        source.setNextPlan("wait for the close");
+        StockReviewTrade trade = new StockReviewTrade();
+        trade.setStockCode("000001");
+        trade.setStockName("Ping An");
+        trade.setDirection("1");
+        trade.setResultTag("0");
+        trade.setQuantity(new BigDecimal("200"));
+        trade.setPrice(new BigDecimal("10.5"));
+        trade.setProfitLoss(new BigDecimal("30"));
+        when(stockReviewMapper.selectPreviousReview(eq(1L), any(Date.class))).thenReturn(source);
+        when(stockReviewMapper.selectTradesByReviewId(9L, 1L)).thenReturn(Collections.singletonList(trade));
 
-        StockReviewTrade copy = stockReviewService.selectPreviousTrades(day, 1L).get(0);
-        assertEquals("000001", copy.getStockCode());
-        assertEquals("1", copy.getDirection());
-        assertNull(copy.getTradeId());
-        assertNull(copy.getQuantity());
-        assertNull(copy.getPrice());
-        assertNull(copy.getProfitLoss());
+        StockReview copy = stockReviewService.selectPreviousReview(day, 1L);
+        assertEquals(day, copy.getReviewDate());
+        assertEquals("held the plan", copy.getConclusion());
+        assertEquals("chased the open", copy.getMistake());
+        assertEquals("wait for the close", copy.getNextPlan());
+        assertNull(copy.getReviewId());
+        StockReviewTrade copiedTrade = copy.getTrades().get(0);
+        assertEquals("000001", copiedTrade.getStockCode());
+        assertEquals("1", copiedTrade.getDirection());
+        assertNull(copiedTrade.getTradeId());
+        assertNull(copiedTrade.getQuantity());
+        assertNull(copiedTrade.getPrice());
+        assertNull(copiedTrade.getProfitLoss());
     }
 
     @Test

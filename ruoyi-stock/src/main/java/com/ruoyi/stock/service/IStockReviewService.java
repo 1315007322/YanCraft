@@ -30,7 +30,7 @@ public interface IStockReviewService
 
     StockReviewStatistics selectMonthStatistics(int year, int month, Long ownerUserId);
 
-    List<StockReviewTrade> selectPreviousTrades(Date beforeDate, Long ownerUserId);
+    StockReview selectPreviousReview(Date beforeDate, Long ownerUserId);
 
     int saveReview(StockReview review);
 

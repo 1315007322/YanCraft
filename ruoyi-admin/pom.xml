@@ -79,6 +79,12 @@
             <artifactId>ruoyi-stock</artifactId>
         </dependency>
 
+        <!-- 考公记忆模块 -->
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>ruoyi-exam</artifactId>
+        </dependency>
+
         <!-- 阿里云 OSS（启动模块显式引入，避免 IDEA/DevTools 丢传递依赖） -->
         <dependency>
             <groupId>com.aliyun.oss</groupId>

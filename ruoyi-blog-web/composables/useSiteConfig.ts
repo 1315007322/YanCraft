@@ -22,6 +22,7 @@ export function defaultSiteSetting(): CmsSiteSetting {
     friendLinkEnabled: "0",
     labEnabled: "0",
     stockReviewEnabled: "0",
+    verbalEnabled: "0",
     stockReviewCoverCalm: "",
     stockReviewCoverOptimistic: "",
     stockReviewCoverCautious: "",

@@ -23,5 +23,8 @@ const source = computed(() => {
   return raw
 })
 const html = computed(() => renderMarkdown(source.value))
-useHead({ title: () => site.value.aboutTitle || site.value.author || site.value.siteName || "SuperYan" })
+usePageSeo(site, {
+  title: () => site.value.aboutTitle || site.value.author || site.value.siteName || "关于",
+  description: () => site.value.authorSignature || site.value.tagline
+})
 </script>

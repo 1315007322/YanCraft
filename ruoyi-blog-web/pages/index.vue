@@ -40,7 +40,11 @@ const articles = computed(() => data.value?.rows || [])
 const total = computed(() => data.value?.total || 0)
 const pageCount = computed(() => Math.max(1, Math.ceil(total.value / pageSize.value)))
 
-useHead({ title: () => `${pageTitle.value}` })
+usePageSeo(site, {
+  title: () => pageTitle.value,
+  description: () => keyword.value ? `搜索「${keyword.value}」` : site.value.tagline,
+  noindex: () => Boolean(keyword.value)
+})
 
 function pageLink(target: number) {
   const q: Record<string, string> = {}

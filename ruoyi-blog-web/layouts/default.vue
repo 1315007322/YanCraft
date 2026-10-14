@@ -62,6 +62,12 @@
                 <span>股票复盘</span>
               </NuxtLink>
             </li>
+            <li v-if="isEnabled(site.verbalEnabled)">
+              <NuxtLink to="/verbal" active-class="active">
+                <Languages :size="20" :stroke-width="2" />
+                <span>言语积累</span>
+              </NuxtLink>
+            </li>
             <li v-for="item in extraNavs" :key="item.name + (item.url || '')">
               <a
                 :href="item.url"
@@ -169,7 +175,7 @@
 </template>
 
 <script setup lang="ts">
-import { ChevronDown, ExternalLink, FlaskConical, Folder, House, LineChart, Link as LinkIcon, Menu, User, X } from "lucide-vue-next"
+import { ChevronDown, ExternalLink, FlaskConical, Folder, House, Languages, LineChart, Link as LinkIcon, Menu, User, X } from "lucide-vue-next"
 import RouteProgress from "~/components/RouteProgress.vue"
 import { normalizeThemeId } from "~/utils/themes"
 

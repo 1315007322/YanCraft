@@ -1,4 +1,4 @@
-import type { AjaxResult, ArticleListQuery, CmsArticle, CmsCategory, CmsFriendLink, CmsLabProject, CmsSiteSetting, CmsTag, StockReview, TableDataInfo } from "~/types/cms"
+import type { AjaxResult, ArticleListQuery, CmsArticle, CmsCategory, CmsFriendLink, CmsLabProject, CmsSiteSetting, CmsTag, ExamVerbalCard, StockReview, TableDataInfo } from "~/types/cms"
 
 function apiPrefix() {
   const config = useRuntimeConfig()
@@ -112,6 +112,50 @@ export async function fetchStockReview(reviewId: string) {
     return await $fetch<AjaxResult<StockReview>>(`${apiPrefix()}/portal/stock/review/${encodeURIComponent(reviewId)}`)
   } catch {
     return { code: 500, msg: "unavailable" } as AjaxResult<StockReview>
+  }
+}
+
+export async function fetchVerbalCards(query: { pageNum?: number; pageSize?: number; keyword?: string; cardType?: string } = {}) {
+  try {
+    return await $fetch<TableDataInfo<ExamVerbalCard>>(`${apiPrefix()}/portal/exam/verbal/list`, {
+      query: {
+        pageNum: query.pageNum || 1,
+        pageSize: query.pageSize || 12,
+        keyword: query.keyword || undefined,
+        cardType: query.cardType || undefined
+      }
+    })
+  } catch {
+    return { code: 500, msg: "unavailable", total: 0, rows: [] }
+  }
+}
+
+export async function fetchTodayVerbalCards() {
+  try {
+    return await $fetch<AjaxResult<ExamVerbalCard[]>>(`${apiPrefix()}/portal/exam/verbal/today`)
+  } catch {
+    return { code: 500, msg: "unavailable", data: [] } as AjaxResult<ExamVerbalCard[]>
+  }
+}
+
+export async function fetchRandomVerbalCard(keyword?: string, cardType?: string) {
+  try {
+    return await $fetch<AjaxResult<ExamVerbalCard>>(`${apiPrefix()}/portal/exam/verbal/random`, {
+      query: { keyword: keyword || undefined, cardType: cardType || undefined }
+    })
+  } catch {
+    return { code: 500, msg: "unavailable" } as AjaxResult<ExamVerbalCard>
+  }
+}
+
+export async function missVerbalCard(cardId: number) {
+  try {
+    return await $fetch<AjaxResult<ExamVerbalCard>>(`${apiPrefix()}/portal/exam/verbal/miss`, {
+      method: "POST",
+      body: { cardId }
+    })
+  } catch {
+    return { code: 500, msg: "unavailable" } as AjaxResult<ExamVerbalCard>
   }
 }
 

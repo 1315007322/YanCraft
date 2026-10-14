@@ -162,23 +162,41 @@ public class StockReviewServiceImpl implements IStockReviewService
     }
 
     @Override
-    public List<StockReviewTrade> selectPreviousTrades(Date beforeDate, Long ownerUserId)
+    public StockReview selectPreviousReview(Date beforeDate, Long ownerUserId)
     {
         Date day = normalizeDate(beforeDate);
-        List<StockReviewTrade> source = stockReviewMapper.selectPreviousTrades(ownerUserId, day);
-        List<StockReviewTrade> copies = new ArrayList<StockReviewTrade>();
-        int sort = 0;
-        for (StockReviewTrade item : source)
+        StockReview source = stockReviewMapper.selectPreviousReview(ownerUserId, day);
+        StockReview copy = new StockReview();
+        copy.setTrades(new ArrayList<StockReviewTrade>());
+        if (source == null)
         {
-            StockReviewTrade copy = new StockReviewTrade();
-            copy.setStockCode(item.getStockCode());
-            copy.setStockName(item.getStockName());
-            copy.setDirection(item.getDirection());
-            copy.setResultTag(item.getResultTag());
-            copy.setSort(sort++);
-            copies.add(copy);
+            return copy;
         }
-        return copies;
+        copy.setReviewDate(source.getReviewDate());
+        copy.setConclusion(source.getConclusion());
+        copy.setMistake(source.getMistake());
+        copy.setNextPlan(source.getNextPlan());
+        List<StockReviewTrade> trades = stockReviewMapper.selectTradesByReviewId(source.getReviewId(), ownerUserId);
+        int sort = 0;
+        if (trades == null)
+        {
+            return copy;
+        }
+        for (StockReviewTrade item : trades)
+        {
+            if (item == null || StringUtils.isEmpty(item.getStockCode()))
+            {
+                continue;
+            }
+            StockReviewTrade trade = new StockReviewTrade();
+            trade.setStockCode(item.getStockCode().trim());
+            trade.setStockName(item.getStockName());
+            trade.setDirection(item.getDirection());
+            trade.setResultTag(item.getResultTag());
+            trade.setSort(sort++);
+            copy.getTrades().add(trade);
+        }
+        return copy;
     }
 
     @Override

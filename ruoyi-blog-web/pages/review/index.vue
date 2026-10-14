@@ -62,7 +62,10 @@ const reviews = computed(() => data.value?.rows || [])
 const total = computed(() => data.value?.total || 0)
 const pageCount = computed(() => Math.max(1, Math.ceil(total.value / pageSize.value)))
 
-useHead({ title: () => `股票复盘 · ${site.value.siteName || "SuperYan"}` })
+usePageSeo(site, {
+  title: "股票复盘",
+  description: "每天的结论、失误和下一次怎么做。"
+})
 
 const moods: Record<string, string> = {
   "0": "冷静",

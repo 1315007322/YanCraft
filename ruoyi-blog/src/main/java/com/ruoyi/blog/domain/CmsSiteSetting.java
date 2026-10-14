@@ -69,6 +69,9 @@ public class CmsSiteSetting
     /** 0 show stock review menu, 1 hide */
     private String stockReviewEnabled;
 
+    /** 0 show verbal menu, 1 hide */
+    private String verbalEnabled;
+
     @Size(max = 500)
     private String stockReviewCoverCalm;
 
@@ -295,6 +298,16 @@ public class CmsSiteSetting
     public void setStockReviewEnabled(String stockReviewEnabled)
     {
         this.stockReviewEnabled = stockReviewEnabled;
+    }
+
+    public String getVerbalEnabled()
+    {
+        return verbalEnabled;
+    }
+
+    public void setVerbalEnabled(String verbalEnabled)
+    {
+        this.verbalEnabled = verbalEnabled;
     }
 
     public String getStockReviewCoverCalm()

@@ -31,5 +31,8 @@ const { data, pending } = await useAsyncData(
 const articles = computed(() => data.value?.list.rows || [])
 const title = computed(() => (data.value?.cats.data || []).find(c => c.slug === slug.value)?.name || slug.value)
 const site = await useSiteConfig()
-useHead({ title: () => `${title.value} · ${site.value.siteName || 'SuperYan'}` })
+usePageSeo(site, {
+  title: () => title.value || "分类",
+  description: () => `${title.value || "分类"}的文章`
+})
 </script>

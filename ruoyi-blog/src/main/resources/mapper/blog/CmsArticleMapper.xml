@@ -80,6 +80,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         order by a.is_top desc, a.publish_time desc, a.article_id desc
     </select>
 
+    <select id="selectAdminArticleList" parameterType="CmsArticle" resultMap="CmsArticleResult">
+        <include refid="selectListVo"/>
+        <include refid="listWhere"/>
+        order by ifnull(a.update_time, a.create_time) desc, a.article_id desc
+    </select>
+
     <select id="selectHotArticleList" resultMap="CmsArticleResult">
         <include refid="selectListVo"/>
         where a.del_flag = '0' and a.status = '1'

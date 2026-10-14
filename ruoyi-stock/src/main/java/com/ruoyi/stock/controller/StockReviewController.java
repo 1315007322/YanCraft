@@ -106,7 +106,7 @@ public class StockReviewController extends BaseController
     @GetMapping("/previous-trades")
     public AjaxResult previousTrades(@RequestParam String before)
     {
-        return success(stockReviewService.selectPreviousTrades(parseDay(before), getUserId()));
+        return success(stockReviewService.selectPreviousReview(parseDay(before), getUserId()));
     }
 
     @PreAuthorize("@ss.hasPermi('stock:review:query')")

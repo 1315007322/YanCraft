@@ -253,26 +253,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         order by sort asc, trade_id asc
     </select>
 
-    <select id="selectPreviousTrades" resultMap="StockReviewTradeResult">
-        select t.trade_id, t.review_id, t.owner_user_id, t.stock_code, t.stock_name, t.direction,
-               t.quantity, t.price, t.profit_loss, t.result_tag, t.note, t.sort, t.del_flag,
-               t.create_by, t.create_time, t.update_by, t.update_time, t.remark
-        from stock_review_trade t
-        where t.owner_user_id = #{ownerUserId}
-          and t.del_flag = '0'
-          and t.review_id = (
-              select r.review_id from stock_review r
-              where r.owner_user_id = #{ownerUserId}
-                and r.del_flag = '0'
-                and r.review_date &lt; #{beforeDate}
-                and exists (
-                    select 1 from stock_review_trade x
-                    where x.review_id = r.review_id and x.owner_user_id = r.owner_user_id and x.del_flag = '0'
-                )
-              order by r.review_date desc
-              limit 1
+    <select id="selectPreviousReview" resultMap="StockReviewResult">
+        <include refid="selectReviewVo"/>
+        where r.owner_user_id = #{ownerUserId}
+          and r.del_flag = '0'
+          and r.review_date &lt; #{beforeDate}
+          and (
+              (r.conclusion is not null and trim(r.conclusion) &lt;&gt; '')
+              or (r.mistake is not null and trim(r.mistake) &lt;&gt; '')
+              or (r.next_plan is not null and trim(r.next_plan) &lt;&gt; '')
+              or exists (
+                  select 1 from stock_review_trade x
+                  where x.review_id = r.review_id
+                    and x.owner_user_id = r.owner_user_id
+                    and x.del_flag = '0'
+                    and x.stock_code is not null
+                    and trim(x.stock_code) &lt;&gt; ''
+              )
           )
-        order by t.sort asc, t.trade_id asc
+        order by r.review_date desc
+        limit 1
     </select>
 
     <select id="selectSymbols" resultType="StockSymbol">
